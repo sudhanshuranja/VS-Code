@@ -1,1 +1,1 @@
-Here is the full code from my Semester 1 to Semesyter 6
+Here is the full code from my Semester 1 to Semester 6
