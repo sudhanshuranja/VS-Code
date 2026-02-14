@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detailed HTML Form</title>
+</head>
+<body>
+
+<!-- Form element starts here -->
+<form action="/submit_form" method="post">
+    <!-- The action attribute specifies where to send the form data when the form is submitted -->
+    <!-- The method attribute specifies the HTTP method to use when sending form data -->
+
+    <!-- Fieldset to group related elements -->
+    <fieldset>
+        <legend>Personal Information</legend>
+        <!-- The legend element provides a caption for the fieldset -->
+
+        <!-- Label and input for first name -->
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" name="fname" placeholder="Enter your first name" required>
+        <!-- The for attribute in label should match the id of the input element -->
+        <!-- The type attribute specifies the type of input (text in this case) -->
+        <!-- The placeholder attribute provides a hint to the user of what can be entered -->
+        <!-- The required attribute makes this field mandatory -->
+
+        <br><br>
+
+        <!-- Label and input for last name -->
+        <label for="lname">Last Name:</label>
+        <input type="text" id="lname" name="lname" placeholder="Enter your last name" required>
+        <!-- Similar attributes as above for the last name -->
+
+        <br><br>
+
+        <!-- Label and input for date of birth -->
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+        <!-- The type attribute specifies the type of input (date in this case) -->
+        <!-- The required attribute makes this field mandatory -->
+
+        <br><br>
+
+        <!-- Radio buttons for gender selection -->
+        <label>Gender:</label>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label>
+        <!-- Radio buttons allow the user to select one option from a set -->
+
+        <br><br>
+
+        <!-- Checkbox for subscription -->
+        <input type="checkbox" id="subscribe" name="subscribe" value="newsletter">
+        <label for="subscribe">Subscribe to newsletter</label>
+        <!-- Checkboxes allow the user to select multiple options -->
+
+    </fieldset>
+
+    <br><br>
+
+    <!-- Fieldset to group related elements -->
+    <fieldset>
+        <legend>Account Information</legend>
+
+        <!-- Label and input for email -->
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <!-- The type attribute specifies the type of input (email in this case) -->
+        <!-- The required attribute makes this field mandatory -->
+
+        <br><br>
+
+        <!-- Label and input for password -->
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <!-- The type attribute specifies the type of input (password in this case) -->
+        <!-- The required attribute makes this field mandatory -->
+
+        <br><br>
+
+        <!-- Label and input for phone number -->
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+        <!-- The type attribute specifies the type of input (tel in this case) -->
+
+        <br><br>
+
+        <!-- Label and input for website URL -->
+        <label for="website">Website:</label>
+        <input type="url" id="website" name="website" placeholder="Enter your website URL">
+        <!-- The type attribute specifies the type of input (url in this case) -->
+
+    </fieldset>
+
+    <br><br>
+
+    <!-- Submit button -->
+    <input type="submit" value="Submit">
+    <!-- The submit button sends the form data to the server -->
+
+</form>
+<!-- Form element ends here -->
+
+</body>
+</html>
