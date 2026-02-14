@@ -1,0 +1,46 @@
+<!--The LPU university cultural committee is organising a talent showcase event and you have been assigned a task of managing the registration process. Designed a digital registered form using your preferred tool(e.g. google forms , Microsoft form) that will collect essential information from participants such as their name ,contact details, talent category and previous experience. Describes the steps you would take to create the form , the fields you would include and how you would ensure data privacy and security during the registration process.-->
+
+<html>
+<head>
+<title>Talent Showcase Registration</title>
+</head>
+<body>
+<h2>Talent Showcase Registration Form</h2>
+ <form >
+<!-- Label and input field for participant's name -->
+<label for="name">Name:</label>
+<input type="text"   id="name"   name="name"  placeholder="Enter your first name" required>
+<br>
+<br>
+        
+<!-- Label and input field for participant's contact details -->
+<label for="contact">Contact Details:</label>
+<input type="text" id="contact" name="contact" placeholder="Enter your contact number" required>
+<br>
+<br>
+        
+<!-- Label and input field for participant's talent category -->
+<label for="talent">Talent Category:</label>
+ <select name="talent" id="talent">
+ <option value="">Select your talent category</option>
+ <option value="singing">Singing</option>
+ <option value="dancing">Dancing</option>
+ <option value="acting">Acting</option>
+ <option value="comedy">Comedy</option>
+ <option value="magic">Magic</option>
+<option value="other">Other</option>
+</select>
+<br>
+<br>
+       
+<!-- Label and text area for participant's previous experience -->
+<label for="experience">Previous Experience:</label>
+<textarea id="experience" name="experience" rows="4" cols="50" placeholder="Write your experiance"></textarea>
+<br>
+<br>
+        
+<!-- Submit button for the form -->
+<input type="submit" value="Register">
+</form>
+</body>
+</html>

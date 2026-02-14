@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+    <form action="#" name="uform">
+        <tr>
+            <td><label for="fname">First Name:</label>
+            <td><input type="text" name="fname" id="fname"></td>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="lname">Last Name:</label></td>
+            <td><input type="text" name="lname" id="lname"></td>
+        </tr>
+        <tr>
+            <td><label for="uname">Full Name:</label></td>
+            <td><input type="text" name="uname" id="uname" disabled></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="submit" onclick="fullname();return false">
+            <input type="reset" value="Reset"></td>
+        </tr>
+    </form>
+    </table>
+
+    <script type="text/javascript">
+        function fullname(){
+        first=document.getElementById("fname").value;
+        last=document.getElementById("lname").value;
+        document.getElementById("uname").value=(first+" "+last);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Information</title>
+  </head>
+  <body>
+    <center><h1>Enter Your Data</h1></center>
+    <fieldset>
+        <legend>User Data</legend>
+      <table>
+        <form action="localhost" method="post">
+          <tr>
+            <td><label for="uname">Name:</label></td>
+            <td>
+              <input
+                type="text"
+                name="uname"
+                id="uname"
+                maxlength="20"
+                required
+              />
+            </td>
+          </tr>
+          <tr>
+            <td><label for="upassword">Password:</label></td>
+            <td>
+              <input type="password" name="upassword" id="upassword" required />
+            </td>
+          </tr>
+          <tr>
+            <td><label for="umobile">Mobile:</label></td>
+            <td><input type="text" name="umobile" id="umobile" required /></td>
+          </tr>
+          <tr>
+            <td><label for="uemail">Email:</label></td>
+            <td><input type="email" name="uemail" id="uemail" /></td>
+          </tr>
+          <tr>
+            <td><label for="udob">Date of Birth:</label></td>
+            <td><input type="date" name="udob" id="udob" required /></td>
+          </tr>
+          <tr>
+            <td><label for="uage">Age:</label></td>
+            <td><input type="number" name="uage" id="uage" required /></td>
+          </tr>
+          <tr>
+            <td><label for="uqual">Qualification:</label></td>
+            <td>
+              <input type="checkbox" name="uqual" id="uqual" value="10th" />
+              10th<br />
+              <input type="checkbox" name="uqual" id="uqual" value="12th" />
+              12th<br />
+              <input type="checkbox" name="uqual" id="uqual" value="Graduate" />
+              Graduate<br />
+              <input type="checkbox" name="uqual" id="uqual" value="Post Graduate" />
+              Post Graduate
+            </td>
+          </tr>
+          <tr>
+            <td><label for="uimage">Image:</label></td>
+            <td><input type="file" name="uimage" id="uimage" required /></td>
+          </tr>
+          <tr>
+            <td><label for="uappointment">Appointment Time:</label></td>
+            <td><input type="time" name="uappointment" id="uappointment" required></td>
+          </tr>
+          <tr>
+            <td><label for="ugender">Gender</label></td>
+
+            <td>
+              <input type="radio" name="ugender" id="male" value="male" />
+              Male<br />
+              <input
+                type="radio"
+                name="ugender"
+                id="female"
+                value="female"
+              />Female
+            </td>
+          </tr>
+
+          <tr>
+            <td><label for="ucity">City:</label></td>
+            <td>
+              <select name="ucity" id="ucity" required>
+                <option value="Jalandhar">Jalandhar</option>
+                <option value="Ludhiana">Ludhiana</option>
+                <option value="Amritsar">Amritsar</option>
+                <option value="Chandigarh">Chandigarh</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td><label for="uaddress">Address:</label></td>
+            <td>
+              <textarea
+                name="uaddress"
+                id="uaddress"
+                cols="30"
+                rows="10"
+              ></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="submit" value="Submit" /></td>
+            <td><input type="reset" value="Reset" /></td>
+          </tr>
+        </form>
+      </table>
+    </fieldset>
+  </body>
+</html>

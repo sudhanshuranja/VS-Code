@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StaffPro Dashboard - Enterprise Staff Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --dark-bg: #0f172a;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --dark-bg: #0f172a;
+            --light-bg: #1e293b;
+            --card-bg: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-color: #475569;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Authentication Styles */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 450px;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-control.error {
+            border-color: var(--error-color);
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.8rem;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-social {
+            background: white;
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            width: 100%;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-social:hover {
+            background: var(--light-bg);
+            transform: translateY(-1px);
+        }
+
+        .caps-warning {
+            background: var(--warning-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .navbar {
+            background: var(--card-bg);
+            padding: 16px 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .navbar-nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--card-bg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transform: translateX(-100%);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            transform: translateX(8px);
+        }
+
+        .main-content {
+            margin-left: 0;
+            transition: all 0.3s ease;
+        }
+
+        .main-content.shifted {
+            margin-left: 280px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-title {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .stat-change.positive {
+            color: var(--success-color);
+        }
+
+        .stat-change.negative {
+            color: var(--error-color);
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .employee-table {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .table-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--light-bg);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .employee-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 32px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .theme-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .theme-option {
+            padding: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .theme-option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .theme-option.active {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--error-color);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .auth-card {
+                padding: 24px;
+                margin: 16px;
+            }
+
+            .navbar {
+                padding: 12px 16px;
+            }
+
+            .navbar-nav {
+                gap: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main-content.shifted {
+                margin-left: 0;
+            }
+
+            .search-box {
+                width: 100%;
+                margin-bottom: 16px;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Section -->
+    <div id="authSection" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1><i class="fas fa-users-cog"></i> StaffPro</h1>
+                <p>Enterprise Staff Management Dashboard</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                    <div id="emailError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                    <div id="capsWarning" class="caps-warning">
+                        <i class="fas fa-exclamation-triangle"></i> Caps Lock is ON
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="rememberMe"> Remember Me
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <span id="loginText">Sign In</span>
+                    <span id="loginLoading" class="loading hidden"></span>
+                </button>
+
+                <div style="text-align: center; margin: 16px 0; color: var(--text-secondary);">or</div>
+
+                <button type="button" class="btn btn-social" onclick="socialLogin('google')">
+                    <i class="fab fa-google"></i> Continue with Google
+                </button>
+
+                <button type="button" class="btn btn-social" onclick="socialLogin('linkedin')">
+                    <i class="fab fa-linkedin"></i> Continue with LinkedIn
+                </button>
+
+                <div style="text-align: center; margin-top: 24px;">
+                    <a href="#" onclick="showSignup()" style="color: var(--primary-color); text-decoration: none;">
+                        Don't have an account? Sign up
+                    </a>
+                </div>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="hidden">
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" class="form-control" required>
+                    <div id="passwordStrength" class="password-strength">
+                        <div class="strength-bar">
+                            <div id="strengthFill" class="strength-fill"></div>
+                        </div>
+                        <div id="strengthText"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <span id="signupText">Create Account</span>
+                    <span id="signupLoading" class="loading hidden"></span>
+                </button>
+
+                <div style="text-align: center; margin-top: 24px;">
+                    <a href="#" onclick="showLogin()" style="color: var(--primary-color); text-decoration: none;">
+                        Already have an account? Sign in
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Employee Details Form -->
+    <div id="employeeFormSection" class="container hidden">
+        <div class="auth-card" style="max-width: 600px; margin: 40px auto;">
+            <div class="auth-header">
+                <h1>Complete Your Profile</h1>
+                <p>Please provide your employee details</p>
+            </div>
+
+            <form id="employeeDetailsForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="employeeId">Employee ID</label>
+                    <input type="text" id="employeeId" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select id="department" class="form-control" required>
+                        <option value="">Select Department</option>
+                        <option value="hr">Human Resources</option>
+                        <option value="it">Information Technology</option>
+                        <option value="finance">Finance</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="operations">Operations</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="position">Position</label>
+                    <input type="text" id="position" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Continue to Dashboard
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="hidden">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2 style="color: var(--primary-color);">
+                    <i class="fas fa-users-cog"></i> StaffPro
+                </h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" onclick="showDashboardPage('home')" class="active">
+                    <i class="fas fa-home"></i> Dashboard
+                </a></li>
+                <li><a href="#" onclick="showDashboardPage('employees')">
+                    <i class="fas fa-users"></i> Employees
+                </a></li>
+                <li><a href="#" onclick="showDashboardPage('reports')">
+                    <i class="fas fa-chart-bar"></i> Reports
+                </a></li>
+                <li><a href="#" onclick="showDashboardPage('settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </a></li>
+                <li><a href="#" onclick="showDashboardPage('about')">
+                    <i class="fas fa-info-circle"></i> About
+                </a></li>
+                <li><a href="#" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="main-content">
+            <!-- Navigation Bar -->
+            <div class="container">
+                <nav class="navbar">
+                    <div class="navbar-brand">
+                        <button onclick="toggleSidebar()" style="background: none; border: none; font-size: 1.2rem; margin-right: 16px; cursor: pointer; color: var(--primary-color);">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        Dashboard
+                    </div>
+                    <div class="navbar-nav">
+                        <span id="userWelcome">Welcome, User!</span>
+                        <button onclick="toggleTheme()" class="btn" style="padding: 8px 12px; background: var(--light-bg);">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+                    </div>
+                </nav>
+
+                <!-- Dashboard Home -->
+                <div id="dashboardHome" class="dashboard-page active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Total Employees</div>
+                                <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="totalEmployees">247</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> +12% from last month
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Present Today</div>
+                                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="presentToday">234</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 94.7% attendance
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">On Leave</div>
+                                <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                                    <i class="fas fa-calendar-times"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="onLeave">8</div>
+                            <div class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i> -2 from yesterday
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">New Hires</div>
+                                <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="newHires">5</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> This week
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Attendance Overview</h3>
+                            <select class="form-control" style="width: auto;">
+                                <option>Last 7 days</option>
+                                <option>Last 30 days</option>
+                                <option>Last 3 months</option>
+                            </select>
+                        </div>
+                        <canvas id="attendanceChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Department Distribution</h3>
+                        </div>
+                        <canvas id="departmentChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Employees Page -->
+                <div id="dashboardEmployees" class="dashboard-page">
+                    <div class="employee-table">
+                        <div class="table-header">
+                            <h3>Employee Directory</h3>
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search employees..." id="employeeSearch">
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Department</th>
+                                    <th>Position</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeTableBody">
+                                <!-- Employee data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Reports Page -->
+                <div id="dashboardReports" class="dashboard-page">
+                    <h2>Reports & Analytics</h2>
+                    <div class="stats-grid">
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Performance Metrics</h3>
+                            </div>
+                            <canvas id="performanceChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Monthly Trends</h3>
+                            </div>
+                            <canvas id="trendsChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="dashboardSettings" class="dashboard-page">
+                    <h2>Settings</h2>
+                    <div style="display: grid; gap: 24px;">
+                        <div class="stat-card">
+                            <h3>Account Settings</h3>
+                            <div style="margin-top: 16px;">
+                                <button class="btn btn-primary" onclick="showModal('passwordModal')">
+                                    Change Password
+                                </button>
+                                <button class="btn btn-primary" onclick="showModal('profileModal')" style="margin-left: 12px;">
+                                    Update Profile
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Theme Settings</h3>
+                            <div class="theme-selector">
+                                <div class="theme-option active" onclick="setTheme('light')">
+                                    <i class="fas fa-sun" style="font-size: 2rem; color: #f59e0b;"></i>
+                                    <div>Light</div>
+                                </div>
+                                <div class="theme-option" onclick="setTheme('dark')">
+                                    <i class="fas fa-moon" style="font-size: 2rem; color: #6366f1;"></i>
+                                    <div>Dark</div>
+                                </div>
+                                <div class="theme-option" onclick="setTheme('auto')">
+                                    <i class="fas fa-adjust" style="font-size: 2rem; color: #8b5cf6;"></i>
+                                    <div>Auto</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Notification Settings</h3>
+                            <div style="margin-top: 16px;">
+                                <label style="display: flex; align-items: center; margin-bottom: 12px;">
+                                    <input type="checkbox" checked style="margin-right: 12px;">
+                                    Email notifications
+                                </label>
+                                <label style="display: flex; align-items: center; margin-bottom: 12px;">
+                                    <input type="checkbox" checked style="margin-right: 12px;">
+                                    Push notifications
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" style="margin-right: 12px;">
+                                    SMS notifications
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Page -->
+                <div id="dashboardAbout" class="dashboard-page">
+                    <div class="stat-card">
+                        <h2>About StaffPro Dashboard</h2>
+                        <p style="margin: 16px 0; line-height: 1.6;">
+                            StaffPro is a comprehensive employee management dashboard designed for modern enterprises. 
+                            Built with security, usability, and scalability in mind, it provides real-time insights 
+                            into your workforce management.
+                        </p>
+                        
+                        <h3 style="margin-top: 24px;">Features</h3>
+                        <ul style="margin: 16px 0; line-height: 1.8;">
+                            <li>Real-time employee tracking and analytics</li>
+                            <li>Secure authentication with JWT tokens</li>
+                            <li>Responsive design for all devices</li>
+                            <li>Customizable themes and notifications</li>
+                            <li>Advanced reporting and data visualization</li>
+                            <li>Role-based access control</li>
+                        </ul>
+
+                        <h3 style="margin-top: 24px;">Version Information</h3>
+                        <p style="margin: 16px 0;">
+                            <strong>Version:</strong> 1.0.0<br>
+                            <strong>Last Updated:</strong> June 2025<br>
+                            <strong>Support:</strong> support@staffpro.com
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <h3>Change Password</h3>
+            <form id="passwordChangeForm">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" class="form-control" required>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button type="submit" class="btn btn-primary">Update Password</button>
+                    <button type="button" class="btn" onclick="hideModal('passwordModal')" style="background: var(--border-color);">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <h3>Update Profile</h3>
+            <form id="profileUpdateForm">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" class="form-control" required>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                    <button type="button" class="btn" onclick="hideModal('profileModal')" style="background: var(--border-color);">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Global Variables
+        let currentUser = null;
+        let employees = [];
+        let currentTheme = 'light';
+        let sidebarOpen = false;
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            generateSampleData();
+        });
+
+        function initializeApp() {
+            // Check for saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            // Check for saved user session
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        }
+
+        function setupEventListeners() {
+            // Authentication forms
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
+            document.getElementById('employeeDetailsForm').addEventListener('submit', handleEmployeeDetails);
+
+            // Password strength checker
+            document.getElementById('signupPassword').addEventListener('input', checkPasswordStrength);
+
+            // Caps lock detection
+            document.getElementById('loginPassword').addEventListener('keyup', detectCapsLock);
+
+            // Employee search
+            document.getElementById('employeeSearch').addEventListener('input', filterEmployees);
+
+            // Modal forms
+            document.getElementById('passwordChangeForm').addEventListener('submit', handlePasswordChange);
+            document.getElementById('profileUpdateForm').addEventListener('submit', handleProfileUpdate);
+
+            // Close modals on outside click
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('active');
+                }
+            });
+        }
+
+        // Authentication Functions
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            showLoading('login');
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Basic validation (in real app, this would be server-side)
+            if (email && password.length >= 6) {
+                currentUser = {
+                    email: email,
+                    name: email.split('@')[0],
+                    id: Date.now()
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showNotification('Login successful!', 'success');
+                showEmployeeForm();
+            } else {
+                showNotification('Invalid credentials. Please try again.', 'error');
+            }
+            
+            hideLoading('login');
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match!', 'error');
+                return;
+            }
+            
+            showLoading('signup');
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            currentUser = {
+                email: email,
+                name: email.split('@')[0],
+                id: Date.now()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            showNotification('Account created successfully!', 'success');
+            showEmployeeForm();
+            
+            hideLoading('signup');
+        }
+
+        function handleEmployeeDetails(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const employeeData = Object.fromEntries(formData);
+            
+            currentUser = { ...currentUser, ...employeeData };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            showNotification('Profile completed successfully!', 'success');
+            showDashboard();
+        }
+
+        function socialLogin(provider) {
+            showNotification(`${provider} login would be implemented here`, 'success');
+            // In real implementation, this would redirect to OAuth provider
+        }
+
+        // UI Navigation Functions
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+        }
+
+        function showSignup() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.remove('hidden');
+        }
+
+        function showEmployeeForm() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('employeeFormSection').classList.remove('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('employeeFormSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            
+            if (currentUser) {
+                document.getElementById('userWelcome').textContent = `Welcome, ${currentUser.name || currentUser.email}!`;
+            }
+            
+            updateDashboardData();
+            renderCharts();
+        }
+
+        function showDashboardPage(page) {
+            // Hide all pages
+            document.querySelectorAll('.dashboard-page').forEach(p => p.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(`dashboard${page.charAt(0).toUpperCase() + page.slice(1)}`).classList.add('active');
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        }
+
+        function toggleSidebar() {
+            sidebarOpen = !sidebarOpen;
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('mainContent').classList.toggle('shifted');
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('authSection').classList.remove('hidden');
+            
+            showNotification('Logged out successfully', 'success');
+        }
+
+        // Theme Functions
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+        }
+
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            const themeIcon = document.getElementById('themeIcon');
+            if (themeIcon) {
+                themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+            
+            // Update theme selector
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('onclick') === `setTheme('${theme}')`) {
+                    option.classList.add('active');
+                }
+            });
+        }
+
+        // Utility Functions
+        function checkPasswordStrength() {
+            const password = document.getElementById('signupPassword').value;
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            let feedback = [];
+            
+            if (password.length >= 8) strength += 25;
+            else feedback.push('At least 8 characters');
+            
+            if (/[a-z]/.test(password)) strength += 25;
+            else feedback.push('Lowercase letter');
+            
+            if (/[A-Z]/.test(password)) strength += 25;
+            else feedback.push('Uppercase letter');
+            
+            if (/[0-9]/.test(password)) strength += 25;
+            else feedback.push('Number');
+            
+            strengthFill.style.width = strength + '%';
+            
+            if (strength < 50) {
+                strengthFill.style.background = '#ef4444';
+                strengthText.textContent = 'Weak: ' + feedback.join(', ');
+            } else if (strength < 75) {
+                strengthFill.style.background = '#f59e0b';
+                strengthText.textContent = 'Medium: ' + feedback.join(', ');
+            } else {
+                strengthFill.style.background = '#10b981';
+                strengthText.textContent = 'Strong password';
+            }
+        }
+
+        function detectCapsLock(e) {
+            const capsWarning = document.getElementById('capsWarning');
+            if (e.getModifierState && e.getModifierState('CapsLock')) {
+                capsWarning.style.display = 'block';
+            } else {
+                capsWarning.style.display = 'none';
+            }
+        }
+
+        function showLoading(type) {
+            document.getElementById(`${type}Text`).classList.add('hidden');
+            document.getElementById(`${type}Loading`).classList.remove('hidden');
+        }
+
+        function hideLoading(type) {
+            document.getElementById(`${type}Text`).classList.remove('hidden');
+            document.getElementById(`${type}Loading`).classList.add('hidden');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Data Management Functions
+        function generateSampleData() {
+            employees = [
+                { id: 1, name: 'John Doe', department: 'IT', position: 'Senior Developer', status: 'active', email: 'john@company.com' },
+                { id: 2, name: 'Jane Smith', department: 'HR', position: 'HR Manager', status: 'active', email: 'jane@company.com' },
+                { id: 3, name: 'Mike Johnson', department: 'Finance', position: 'Financial Analyst', status: 'active', email: 'mike@company.com' },
+                { id: 4, name: 'Sarah Wilson', department: 'Marketing', position: 'Marketing Specialist', status: 'inactive', email: 'sarah@company.com' },
+                { id: 5, name: 'David Brown', department: 'Operations', position: 'Operations Manager', status: 'active', email: 'david@company.com' }
+            ];
+            
+            renderEmployeeTable();
+        }
+
+        function renderEmployeeTable() {
+            const tbody = document.getElementById('employeeTableBody');
+            tbody.innerHTML = '';
+            
+            employees.forEach(employee => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            <div class="employee-avatar">${employee.name.charAt(0)}</div>
+                            <div>
+                                <div style="font-weight: 600;">${employee.name}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">${employee.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${employee.department}</td>
+                    <td>${employee.position}</td>
+                    <td>
+                        <span class="status-badge status-${employee.status}">
+                            ${employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn" style="padding: 4px 8px; font-size: 0.8rem; background: var(--primary-color); color: white;">
+                            View
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterEmployees() {
+            const searchTerm = document.getElementById('employeeSearch').value.toLowerCase();
+            const filteredEmployees = employees.filter(emp => 
+                emp.name.toLowerCase().includes(searchTerm) ||
+                emp.department.toLowerCase().includes(searchTerm) ||
+                emp.position.toLowerCase().includes(searchTerm)
+            );
+            
+            const tbody = document.getElementById('employeeTableBody');
+            tbody.innerHTML = '';
+            
+            filteredEmployees.forEach(employee => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            <div class="employee-avatar">${employee.name.charAt(0)}</div>
+                            <div>
+                                <div style="font-weight: 600;">${employee.name}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">${employee.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${employee.department}</td>
+                    <td>${employee.position}</td>
+                    <td>
+                        <span class="status-badge status-${employee.status}">
+                            ${employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn" style="padding: 4px 8px; font-size: 0.8rem; background: var(--primary-color); color: white;">
+                            View
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateDashboardData() {
+            // Simulate real-time data updates
+            setInterval(() => {
+                const presentToday = document.getElementById('presentToday');
+                if (presentToday) {
+                    const current = parseInt(presentToday.textContent);
+                    const change = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+                    presentToday.textContent = Math.max(0, current + change);
+                }
+            }, 5000);
+        }
+
+        // Chart Functions (using Canvas)
+        function renderCharts() {
+            renderAttendanceChart();
+            renderDepartmentChart();
+            renderPerformanceChart();
+            renderTrendsChart();
+        }
+
+        function renderAttendanceChart() {
+            const canvas = document.getElementById('attendanceChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Sample data
+            const data = [85, 92, 88, 94, 89, 96, 91];
+            const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            
+            // Draw chart
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            data.forEach((value, index) => {
+                const x = (index / (data.length - 1)) * (width - 40) + 20;
+                const y = height - (value / 100) * (height - 40) - 20;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+                
+                // Draw points
+                ctx.fillStyle = '#3b82f6';
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Draw labels
+                ctx.fillStyle = '#64748b';
+                ctx.font = '12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(labels[index], x, height - 5);
+                ctx.fillText(value + '%', x, y - 10);
+            });
+            
+            ctx.stroke();
+        }
+
+        function renderDepartmentChart() {
+            const canvas = document.getElementById('departmentChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(centerX, centerY) - 20;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Sample data
+            const data = [
+                { label: 'IT', value: 45, color: '#3b82f6' },
+                { label: 'HR', value: 20, color: '#10b981' },
+                { label: 'Finance', value: 25, color: '#f59e0b' },
+                { label: 'Marketing', value: 15, color: '#8b5cf6' },
+                { label: 'Operations', value: 35, color: '#ef4444' }
+            ];
+            
+            let currentAngle = 0;
+            const total = data.reduce((sum, item) => sum + item.value, 0);
+            
+            data.forEach(item => {
+                const sliceAngle = (item.value / total) * 2 * Math.PI;
+                
+                // Draw slice
+                ctx.fillStyle = item.color;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Draw label
+                const labelAngle = currentAngle + sliceAngle / 2;
+                const labelX = centerX + Math.cos(labelAngle) * (radius * 0.7);
+                const labelY = centerY + Math.sin(labelAngle) * (radius * 0.7);
+                
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(item.label, labelX, labelY);
+                ctx.fillText(item.value, labelX, labelY + 15);
+                
+                currentAngle += sliceAngle;
+            });
+        }
+
+        function renderPerformanceChart() {
+            const canvas = document.getElementById('performanceChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Sample bar chart data
+            const data = [78, 85, 92, 88, 95];
+            const labels = ['Q1', 'Q2', 'Q3', 'Q4', 'Q5'];
+            const barWidth = 40;
+            const spacing = 60;
+            
+            data.forEach((value, index) => {
+                const x = index * spacing + 30;
+                const barHeight = (value / 100) * (canvas.height - 60);
+                const y = canvas.height - barHeight - 30;
+                
+                // Draw bar
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(x, y, barWidth, barHeight);
+                
+                // Draw label
+                ctx.fillStyle = '#64748b';
+                ctx.font = '12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(labels[index], x + barWidth/2, canvas.height - 10);
+                ctx.fillText(value + '%', x + barWidth/2, y - 5);
+            });
+        }
+
+        function renderTrendsChart() {
+            const canvas = document.getElementById('trendsChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Sample trend data
+            const data1 = [65, 70, 75, 80, 85, 88];
+            const data2 = [55, 60, 68, 72, 78, 82];
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            
+            // Draw first line
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            data1.forEach((value, index) => {
+                const x = (index / (data1.length - 1)) * (canvas.width - 40) + 20;
+                const y = canvas.height - (value / 100) * (canvas.height - 40) - 20;
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            
+            // Draw second line
+            ctx.strokeStyle = '#10b981';
+            ctx.beginPath();
+            data2.forEach((value, index) => {
+                const x = (index / (data2.length - 1)) * (canvas.width - 40) + 20;
+                const y = canvas.height - (value / 100) * (canvas.height - 40) - 20;
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            
+            // Draw labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            labels.forEach((label, index) => {
+                const x = (index / (labels.length - 1)) * (canvas.width - 40) + 20;
+                ctx.fillText(label, x, canvas.height - 10);
+            });
+        }
+
+        // Form Handlers
+        function handlePasswordChange(e) {
+            e.preventDefault();
+            showNotification('Password updated successfully!', 'success');
+            hideModal('passwordModal');
+        }
+
+        function handleProfileUpdate(e) {
+            e.preventDefault();
+            showNotification('Profile updated successfully!', 'success');
+            hideModal('profileModal');
+        }
+
+        // Responsive Design
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && sidebarOpen) {
+                document.getElementById('mainContent').classList.add('shifted');
+            } else if (window.innerWidth <= 768) {
+                document.getElementById('mainContent').classList.remove('shifted');
+            }
+        });
+    </script>
+</body>
+</html>

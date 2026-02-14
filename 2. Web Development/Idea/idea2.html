@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodayTrain - Same-Day Confirmed Train Tickets</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f97316;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ea580c;
+        }
+        
+        .btn-outline {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            background-color: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('/api/placeholder/1200/600') center/cover;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .search-form {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+        
+        .search-btn {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .features {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h3 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(37, 99, 235, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .feature-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+        
+        .how-it-works {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .steps {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+        }
+        
+        .step-content h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .step-content p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+        
+        .step-line {
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: -40px;
+            width: 2px;
+            background-color: var(--gray-light);
+            z-index: 0;
+        }
+        
+        .step:last-child .step-line {
+            display: none;
+        }
+        
+        .testimonials {
+            padding: 4rem 0;
+            background-color: #f8fafc;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .testimonial-text::before {
+            content: '"';
+            font-size: 3rem;
+            font-family: Georgia, serif;
+            color: rgba(37, 99, 235, 0.1);
+            position: absolute;
+            top: -20px;
+            left: -20px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-location {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        .pricing {
+            padding: 4rem 0;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .pricing-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pricing-header {
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray);
+        }
+        
+        .pricing-description {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-light);
+            color: var(--gray);
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .pricing-btn {
+            width: 100%;
+        }
+        
+        .faq {
+            padding: 4rem 0;
+            background-color: #f8fafc;
+        }
+        
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background-color: white;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+        
+        .cta {
+            padding: 4rem 0;
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-white {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .btn-white:hover {
+            background-color: #f8fafc;
+        }
+        
+        .btn-outline-white {
+            border: 1px solid white;
+            color: white;
+            background-color: transparent;
+        }
+        
+        .btn-outline-white:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        
+        .footer-logo h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .footer-logo span {
+            color: var(--secondary);
+        }
+        
+        .footer-text {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .footer-heading {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links li a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links li a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+            
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: white;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                padding: 1rem;
+                z-index: 100;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 0;
+                padding: 0.75rem 0;
+                border-bottom: 1px solid var(--gray-light);
+            }
+            
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Live train results */
+        .results-section {
+            padding: 3rem 0;
+            display: none;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .journey-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .journey-stations {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .journey-date {
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 0.375rem;
+            background-color: white;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .train-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .train-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .train-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .train-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .train-number {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .confirmation-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .confirmed {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .train-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .time-container {
+            text-align: center;
+            flex: 1;
+        }
+
+        .time {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .station {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .journey-time {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .journey-duration {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .journey-line {
+            width: 100%;
+            height: 2px;
+            background-color: var(--gray-light);
+            position: relative;  
+        }
+
+        .journey-line::before, .journey-line::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .journey-line::before {
+            left: 0;
+        }
+
+        .journey-line::after {
+            right: 0;
+        }
+
+        .seat-availability {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--gray-light);
+            padding-top: 1.5rem;
+        }
+
+        .seat-info {
+            flex: 3;
+        }
+
+        .seat-class {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .available-seats {
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .fare {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            flex: 1;
+            text-align: center;
+        }
+
+        .book-btn-container {
+            flex: 1;
+            text-align: right;
+        }
+
+        /* Smart Features Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 0.75rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .smart-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .smart-feature {
+            border: 1px solid var(--gray-light);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .smart-feature:hover {
+            border-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .smart-feature i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .smart-feature h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .smart-feature p {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .nearby-stations {
+            margin-top: 2rem;
+        }
+
+        .nearby-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .station-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .station-option {
+            border: 1px solid var(--gray-light);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .station-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .station-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .station-distance {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .seats-available {
+            color: var(--success);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 15h20"></path>
+                    <path d="M15 2v20"></path>
+                    <path d="M15 15H2a3 3 0 0 0 3 3h12.5"></path>
+                    <path d="M20 9h-5a2 2 0 0 0-2 2v4"></path>
+                    <circle cx="18" cy="18" r="3"></circle>
+                    <circle cx="6" cy="6" r="1"></circle>
+                </svg>
+                <h1>Today<span>Train</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact" class="btn btn-outline">Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Same-Day Confirmed Train Tickets</h2>
+            <p>Need to travel today? TodayTrain guarantees confirmed seats for your urgent journeys with our smart booking system.</p>
+            
+            <div class="search-form">
+                <form id="booking-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="from">From</label>
+                            <input type="text" id="from" placeholder="Enter source station">
+                        </div>
+                        <div class="form-group">
+                            <label for="to">To</label>
+                            <input type="text" id="to" placeholder="Enter destination">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" value="2025-05-20">
+                        </div>
+                        <div class="form-group">
+                            <label for="class">Travel Class</label>
+                            <select id="class">
+                                <option value="SL">Sleeper Class (SL)</option>
+                                <option value="3A">AC 3 Tier (3A)</option>
+                                <option value="2A">AC 2 Tier (2A)</option>
+                                <option value="1A">AC First Class (1A)</option>
+                                <option value="CC">AC Chair Car (CC)</option>
+                                <option value="EC">Executive Class (EC)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary search-btn" id="search-button">Find Confirmed Tickets</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Train Search Results (Hidden by default) -->
+    <section class="results-section" id="results-section">
+        <div class="container">
+            <div class="results-header">
+                <div class="journey-info">
+                    <div>
+                        <div class="journey-stations">Delhi → Mumbai</div>
+                        <div class="journey-date">Today, May 20, 2025</div>
+                    </div>
+                </div>
+                <div class="filter-options">
+                    <button class="filter-btn active">All Trains</button>
+                    <button class="filter-btn">Morning</button>
+                    <button class="filter-btn">Afternoon</button>
+                    <button class="filter-btn">Evening</button>
+                    <button class="filter-btn" id="smart-options">Smart Options</button>
+                </div>
+            </div>
+
+            <!-- Train cards -->
+            <div class="train-card">
+                <div class="train-header">
+                    <div>
+                        <div class="train-name">Rajdhani Express</div>
+                        <div class="train-number">#12952</div>
+                    </div>
+                    <span class="confirmation-badge confirmed">Confirmed</span>
+                </div>
+                <div class="train-details">
+                    <div class="time-container">
+                        <div class="time">16:25</div>
+                        <div class="station">Delhi (NDLS)</div>
+                    </div>
+                    <div class="journey-time">
+                        <div class="journey-duration">15h 35m</div>
+                        <div class="journey-line"></div>
+                    </div>
+                    <div class="time-container">
+                        <div class="time">08:00</div>
+                        <div class="station">Mumbai (CSTM)</div>
+                    </div>
+                </div>
+                <div class="seat-availability">
+                    <div class="seat-info">
+                        <div class="seat-class">AC 3-Tier (3A)</div>
+                        <div class="available-seats">12 seats available</div>
+                    </div>
+                    <div class="fare">₹2,245</div>
+                    <div class="book-btn-container">
+                        <button class="btn btn-primary">Book Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="train-card">
+                <div class="train-header">
+                    <div>
+                        <div class="train-name">Mumbai Duronto Express</div>
+                        <div class="train-number">#12223</div>
+                    </div>
+                    <span class="confirmation-badge confirmed">Confirmed</span>
+                </div>
+                <div class="train-details">
+                    <div class="time-container">
+                        <div class="time">23:05</div>
+                        <div class="station">Delhi (NDLS)</div>
+                    </div>
+                    <div class="journey-time">
+                        <div class="journey-duration">16h 10m</div>
+                        <div class="journey-line"></div>
+                    </div>
+                    <div class="time-container">
+                        <div class="time">15:15</div>
+                        <div class="station">Mumbai (CSTM)</div>
+                    </div>
+                </div>
+                <div class="seat-availability">
+                    <div class="seat-info">
+                        <div class="seat-class">AC 2-Tier (2A)</div>
+                        <div class="available-seats">8 seats available</div>
+                    </div>
+                    <div class="fare">₹3,120</div>
+                    <div class="book-btn-container">
+                        <button class="btn btn-primary">Book Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="train-card">
+                <div class="train-header">
+                    <div>
+                        <div class="train-name">August Kranti Rajdhani Express</div>
+                        <div class="train-number">#12953</div>
+                    </div>
+                    <span class="confirmation-badge confirmed">Confirmed</span>
+                </div>
+                <div class="train-details">
+                    <div class="time-container">
+                        <div class="time">17:40</div>
+                        <div class="station">Delhi (NDLS)</div>
+                    </div>
+                    <div class="journey-time">
+                        <div class="journey-duration">15h 50m</div>
+                        <div class="journey-line"></div>
+                    </div>
+                    <div class="time-container">
+                        <div class="time">09:30</div>
+                        <div class="station">Mumbai (BDTS)</div>
+                    </div>
+                </div>
+                <div class="seat-availability">
+                    <div class="seat-info">
+                        <div class="seat-class">Sleeper (SL)</div>
+                        <div class="available-seats">23 seats available</div>
+                    </div>
+                    <div class="fare">₹1,450</div>
+                    <div class="book-btn-container">
+                        <button class="btn btn-primary">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Options Modal -->
+    <div class="modal" id="smart-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Smart Booking Options</h3>
+            <p>Our AI-powered system found these additional options to guarantee your journey today:</p>
+            
+            <div class="smart-features-grid">
+                <div class="smart-feature">
+                    <i class="fas fa-route"></i>
+                    <h4>Split Journey</h4>
+                    <p>Connect through intermediate stations with confirmed tickets</p>
+                </div>
+                <div class="smart-feature">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h4>Nearby Stations</h4>
+                    <p>Start from nearby stations with confirmed availability</p>
+                </div>
+                <div class="smart-feature">
+                    <i class="fas fa-sync-alt"></i>
+                    <h4>VIKALP Guarantee</h4>
+                    <p>Auto-confirmation through alternate trains</p>
+                </div>
+                <div class="smart-feature">
+                    <i class="fas fa-bell"></i>
+                    <h4>Live Alerts</h4>
+                    <p>Get notified when cancellations create openings</p>
+                </div>
+            </div>
+
+            <div class="nearby-stations">
+                <h4 class="nearby-title">Available Nearby Stations</h4>
+                <div class="station-options">
+                    <div class="station-option">
+                        <div class="station-name">Delhi Cantt (DEC)</div>
+                        <div class="station-distance">12km from Delhi</div>
+                        <div class="seats-available">15 confirmed seats</div>
+                    </div>
+                    <div class="station-option">
+                        <div class="station-name">Ghaziabad (GZB)</div>
+                        <div class="station-distance">23km from Delhi</div>
+                        <div class="seats-available">8 confirmed seats</div>
+                    </div>
+                    <div class="station-option">
+                        <div class="station-name">Delhi Sarai Rohilla (DEE)</div>
+                        <div class="station-distance">7km from Delhi</div>
+                        <div class="seats-available">10 confirmed seats</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h3>Why Choose TodayTrain?</h3>
+                <p>Our smart platform uses AI and real-time data to guarantee same-day confirmed train tickets even in peak seasons.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h4>Guaranteed Confirmed Tickets</h4>
+                    <p>Our system only shows trains with available confirmed seats for same-day travel - no waitlists, no uncertainty.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h4>Nearby Station Options</h4>
+                    <p>We recommend confirmed tickets from nearby stations if your preferred station has limited availability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h4>Smart Route Splitting</h4>
+                    <p>Our algorithm combines short routes with confirmed seats when direct routes are unavailable.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h4>VIKALP Auto-Booking</h4>
+                    <p>Leverages Indian Railways' VIKALP scheme to automatically shift your booking to confirmed trains.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h4>Live Cancellation Alerts</h4>
+                    <p>Tracks cancellations in real-time and instantly alerts you when seats become available.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>AI Confirmation Predictor</h4>
+                    <p>Our machine learning algorithm predicts confirmation chances with over 94% accuracy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h3>How TodayTrain Works</h3>
+                <p>Our platform uses advanced algorithms and real-time data to find confirmed train tickets for same-day travel.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-line"></div>
+                    <div class="step-content">
+                        <h4>Enter Your Journey Details</h4>
+                        <p>Simply tell us where you want to go today. Our system automatically sets the date to today and focuses on finding confirmed seats.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-line"></div>
+                    <div class="step-content">
+                        <h4>Smart Ticket Scanning</h4>
+                        <p>Our system scans all trains running today on your route and monitors real-time seat availability. We only show options with confirmed seats.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-line"></div>
+                    <div class="step-content">
+                        <h4>Intelligent Alternatives</h4>
+                        <p>If direct trains aren't available, our system suggests nearby stations, split journeys, or alternative routes to guarantee your travel today.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-line"></div>
+                    <div class="step-content">
+                        <h4>Confirm & Book</h4>
+                        <p>Choose your preferred option and complete the booking. Your ticket is guaranteed to be confirmed for same-day travel.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Travel With Confidence</h4>
+                        <p>Receive your e-ticket instantly and travel without worrying about waitlists or confirmations. TodayTrain guarantees your journey!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h3>What Our Customers Say</h3>
+                <p>Thousands of travelers have successfully booked last-minute confirmed tickets with TodayTrain.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        I needed to reach Mumbai urgently for a business meeting. All tickets showed waiting list, but TodayTrain found me a confirmed seat on Rajdhani. The split journey suggestion was brilliant!
+                    </div>
+                    <div class="user-info">
+                        <img src="/api/placeholder/50/50" alt="User" class="user-avatar">
+                        <div>
+                            <div class="user-name">Rahul Sharma</div>
+                            <div class="user-location">Delhi</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        Family emergency required me to travel from Bangalore to Chennai immediately. No tickets were available online, but TodayTrain found me confirmed seats by suggesting a nearby station. Lifesaver!
+                    </div>
+                    <div class="user-info">
+                        <img src="/api/placeholder/50/50" alt="User" class="user-avatar">
+                        <div>
+                            <div class="user-name">Priya Nair</div>
+                            <div class="user-location">Bangalore</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        During Diwali rush, getting confirmed tickets seemed impossible. TodayTrain's cancellation alert feature helped me grab a ticket as soon as someone cancelled. Highly recommended!
+                    </div>
+                    <div class="user-info">
+                        <img src="/api/placeholder/50/50" alt="User" class="user-avatar">
+                        <div>
+                            <div class="user-name">Amit Patel</div>
+                            <div class="user-location">Ahmedabad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h3>Simple, Transparent Pricing</h3>
+                <p>Choose the plan that works best for your travel needs.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-name">Basic</div>
+                        <div class="pricing-price">₹20 <span>per booking</span></div>
+                        <div class="pricing-description">Perfect for occasional travelers</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Confirmed seat guarantee</li>
+                        <li>Real-time train availability</li>
+                        <li>Nearby station options</li>
+                        <li>Basic customer support</li>
+                        <li>Standard booking priority</li>
+                    </ul>
+                    <button class="btn btn-primary pricing-btn">Choose Basic</button>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-name">Premium</div>
+                        <div class="pricing-price">₹50 <span>per booking</span></div>
+                        <div class="pricing-description">For frequent travelers</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>All Basic features</li>
+                        <li>Split journey suggestions</li>
+                        <li>VIKALP auto-booking</li>
+                        <li>Live cancellation alerts</li>
+                        <li>Priority booking system</li>
+                        <li>24/7 premium support</li>
+                    </ul>
+                    <button class="btn btn-secondary pricing-btn">Choose Premium</button>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-name">Business</div>
+                        <div class="pricing-price">₹499 <span>monthly</span></div>
+                        <div class="pricing-description">For business travelers</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>All Premium features</li>
+                        <li>Unlimited bookings</li>
+                        <li>Tatkal auto-booking</li>
+                        <li>AI prediction for best trains</li>
+                        <li>Alternative transport options</li>
+                        <li>Dedicated account manager</li>
+                    </ul>
+                    <button class="btn btn-primary pricing-btn">Choose Business</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-title">
+                <h3>Frequently Asked Questions</h3>
+                <p>Get answers to common questions about TodayTrain.</p>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How can TodayTrain guarantee confirmed tickets for same-day travel?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        TodayTrain uses a combination of real-time data monitoring, AI predictions, and smart routing algorithms. We scan all available trains, including those from nearby stations, monitor for cancellations, leverage VIKALP scheme, and sometimes suggest split journeys to ensure you get confirmed seats even on the same day.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What if no confirmed tickets are available for my route today?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        In the rare case where no confirmed tickets are available through any of our methods, we'll suggest alternative transportation options like buses or flights. We can also notify you instantly if seats become available due to cancellations.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How does the split journey option work?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Split journey combines two or more shorter train rides with confirmed availability instead of one direct train. For example, if Delhi to Mumbai has no confirmed seats, we might suggest Delhi to Kota and then Kota to Mumbai, both with confirmed seats. Our system ensures reasonable connection times between trains.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is TodayTrain an official IRCTC partner?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, TodayTrain is an authorized B2B partner with IRCTC. We use official APIs to access real-time data and process bookings. All tickets booked through our platform are official IRCTC tickets.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How accurate is the AI prediction for ticket confirmation?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Our AI prediction models have been trained on millions of historical booking patterns and have an accuracy rate of over 94%. The model considers factors like day of week, season, festivals, train route popularity, and historical cancellation patterns to make its predictions.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h3>Need to Travel Today?</h3>
+            <p>TodayTrain guarantees your journey with confirmed tickets. No waiting lists, no uncertainty — just reliable same-day train travel.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-white">Book Now</a>
+                <a href="#" class="btn btn-outline-white">Contact Support</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 15h20"></path>
+                            <path d="M15 2v20"></path>
+                            <path d="M15 15H2a3 3 0 0 0 3 3h12.5"></path>
+                            <path d="M20 9h-5a2 2 0 0 0-2 2v4"></path>
+                            <circle cx="18" cy="18" r="3"></circle>
+                            <circle cx="6" cy="6" r="1"></circle>
+                        </svg>
+                        <h2>Today<span>Train</span></h2>
+                    </div>
+                    <p class="footer-text">Smart platform that guarantees same-day train travel with confirmed seats. Never worry about waitlists again!</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Same-Day Booking</a></li>
+                        <li><a href="#">Tatkal Tickets</a></li>
+                        <li><a href="#">VIKALP Scheme</a></li>
+                        <li><a href="#">Group Bookings</a></li>
+                        <li><a href="#">Corporate Travel</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TodayTrain. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu');
+        const nav = document.querySelector('nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+        
+        // Search button functionality
+        const searchButton = document.getElementById('search-button');
+        const resultsSection = document.getElementById('results-section');
+        
+        searchButton.addEventListener('click', () => {
+            resultsSection.style.display = 'block';
+            window.scrollTo({ top: resultsSection.offsetTop, behavior: 'smooth' });
+        });
+        
+        // Smart options modal
+        const smartOptionsBtn = document.getElementById('smart-options');
+        const smartModal = document.getElementById('smart-modal');
+        const closeModal = document.querySelector('.close-modal');
+        
+        smartOptionsBtn.addEventListener('click', () => {
+            smartModal.style.display = 'flex';
+        });
+        
+        closeModal.addEventListener('click', () => {
+            smartModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === smartModal) {
+                smartModal.style.display = 'none';
+            }
+        });
+        
+        // FAQ accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+                
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                } else {
+                    answer.style.display = 'block';
+                    icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                }
+            });
+        });
+        
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const dateInput = document.getElementById('date');
+            dateInput.valueAsDate = today;
+        });
+    </script>
+</body>
+</html>

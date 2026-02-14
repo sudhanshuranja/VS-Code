@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPU Talent Showcase Registration</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightcyan;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 10px; 
+            background: white;
+            padding: 20px; 
+            border: 2px solid red;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 500px;
+        }
+        .header h1 {
+            margin: 0;
+            color: red;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: blue;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid blue;
+            border-radius: 5px;
+            background-color: lightyellow;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: goldenrod;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .submit-btn:hover {
+            background: darkorange;
+        }
+        .talent-images {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        .talent-images img {
+            width: 120px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://cdn.freelogovectors.net/wp-content/uploads/2019/02/lpu-logo-lovely_professional_university.png" alt="LPU Logo">
+            <h1>Talent Showcase Registration</h1>
+        </div>
+        <form action="submit_form.php" method="post">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact Details:</label>
+                <input type="text" id="contact" name="contact" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="course">Course Name:</label>
+                <select id="course" name="course" required>
+                    <option value="bca">BCA</option>
+                    <option value="btech_cse">B.Tech CSE</option>
+                    <option value="mca">MCA</option>
+                    <option value="mba">MBA</option>
+                    <option value="bba">BBA</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="talent">Talent Category:</label>
+                <select id="talent" name="talent" required>
+                    <option value="singing">Singing</option>
+                    <option value="dancing">Dancing</option>
+                    <option value="acting">Acting</option>
+                    <option value="comedy">Comedy</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="experience">Previous Experience:</label>
+                <textarea id="experience" name="experience" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+        <div class="talent-images">
+            <img src="https://th.bing.com/th/id/R.087a2f16c1f1385c53b1603d1dc51c18?rik=nQjpMGZ%2f20JT3w&riu=http%3a%2f%2fbrightstepacademy.com%2fwp-content%2fuploads%2f2020%2f01%2fSinging.jpg&ehk=D0gNcfxkFd8rMrsJFBYPBcQOzgzq4igD9Ljw7RHlj1U%3d&risl=&pid=ImgRaw&r=0" alt="Singing">
+            <img src="https://th.bing.com/th/id/OIP.B6Zsq9FuWaG30SYMdRb8uQHaLG?w=131&h=196&c=7&r=0&o=5&pid=1.7" alt="Dancing">
+            <img src="https://images.wisegeek.com/actor-on-stage.jpg" alt="Acting">
+            <img src="https://th.bing.com/th/id/OIP.bMIsitDPRkGW_PihL305qQHaEK?rs=1&pid=ImgDetMain" alt="Comedy">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"path": "../../01. DATA STRUCTURE AND ALGORITHM"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../02A.autoPay-Backend"
+		},
+		{
+			"path": "../../03.GIT REPOSITORY"
+		},
+		{
+			"path": "../../04. R Language"
+		},
+		{
+			"path": "../../05. Python"
+		}
+	],
+	"settings": {
+		"r.lsp.promptToInstall": false,
+		"liveServer.settings.multiRootWorkspaceName": "02. WEB DEVELOPMENT",
+		"files.associations": {
+			"iostream": "cpp",
+			"ostream": "cpp",
+			"*.rmd": "markdown",
+			"xstring": "cpp"
+		}
+	}
+}

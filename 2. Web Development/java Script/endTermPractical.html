@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function sumOfArray(arr)
+        {
+            let sum=0;
+            for(let num of arr)
+            {
+                sum= sum + num;
+            }
+            return sum;
+        }
+
+        let numbers = [10,20,40,30];
+        document.write( "Sum of array elements :" + sumOfArray(numbers));
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+import { ArrowRight, Eye, Mail, Download, Sparkles, Code, Database, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+const Hero = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.querySelector(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+  };
+  const floatingElements = [{
+    icon: Code,
+    position: "top-20 left-10",
+    delay: "0s",
+    color: "text-blue-400"
+  }, {
+    icon: Database,
+    position: "top-32 right-20",
+    delay: "1s",
+    color: "text-green-400"
+  }, {
+    icon: TrendingUp,
+    position: "bottom-40 left-20",
+    delay: "2s",
+    color: "text-purple-400"
+  }, {
+    icon: Sparkles,
+    position: "top-1/2 right-10",
+    delay: "0.5s",
+    color: "text-yellow-400"
+  }];
+  return <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+        
+        {/* Gradient Orbs */}
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{
+        animationDelay: '1s'
+      }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{
+        animationDelay: '2s'
+      }}></div>
+        
+        {/* Floating Elements */}
+        {floatingElements.map((element, index) => <div key={index} className={`absolute ${element.position} w-12 h-12 backdrop-blur-glass rounded-full flex items-center justify-center animate-float ${element.color}`} style={{
+        animationDelay: element.delay
+      }}>
+            <element.icon className="w-6 h-6" />
+          </div>)}
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="space-y-8">
+            {/* Status Badge */}
+            <div className="flex items-center gap-3 animate-fade-in">
+              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+              <Badge variant="outline" className="backdrop-blur-glass border-green-400/30 text-green-400">
+                <Sparkles className="w-3 h-3 mr-1" />
+                Available for projects
+              </Badge>
+            </div>
+
+            <div className="space-y-6 animate-fade-in" style={{
+            animationDelay: '0.2s'
+          }}>
+              <div className="text-primary font-semibold text-lg flex items-center gap-2">
+                👋 Hello, I'm
+                <span className="inline-block animate-bounce" style={{
+                animationDelay: '0.5s'
+              }}>✨</span>
+              </div>
+              
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+                <span className="gradient-text bg-gradient-to-r from-primary via-accent to-purple-400 bg-clip-text animate-glow text-red-100">
+                  Sudhanshu
+                </span>
+                <br />
+                <span className="text-foreground relative">
+                  Ranjan
+                  <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent transform scale-x-0 animate-[scale-x_1s_ease-out_1s_forwards] origin-left"></div>
+                </span>
+              </h1>
+              
+              <div className="space-y-2">
+                <div className="text-xl lg:text-2xl text-muted-foreground font-medium">
+                  <span className="gradient-text">Business Development</span> | 
+                  <span className="gradient-text"> Data Science</span> | 
+                  <span className="gradient-text"> EdTech</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="secondary" className="backdrop-blur-glass">💼 BD Intern</Badge>
+                  <Badge variant="secondary" className="backdrop-blur-glass">📊 Data Analyst</Badge>
+                  <Badge variant="secondary" className="backdrop-blur-glass">🎓 BCA Student</Badge>
+                </div>
+              </div>
+            </div>
+
+            <div className="animate-fade-in" style={{
+            animationDelay: '0.4s'
+          }}>
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
+                <span className="text-foreground font-medium">Bridging the gap</span> between technology and education through 
+                <span className="gradient-text font-medium"> data-driven strategies</span>. 
+                Passionate about transforming insights into actionable business solutions.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{
+            animationDelay: '0.6s'
+          }}>
+              <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 glow-primary transition-all duration-300 group relative overflow-hidden" onClick={() => scrollToSection("#projects")}>
+                <div className="absolute inset-0 bg-gradient-to-r from-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <Eye className="w-5 h-5 mr-2 relative z-10" />
+                <span className="relative z-10">View Projects</span>
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform relative z-10" />
+              </Button>
+              
+              <Button variant="outline" size="lg" className="backdrop-blur-glass border-accent/30 text-accent hover:bg-accent/10 hover:border-accent transition-all duration-300 group" onClick={() => scrollToSection("#contact")}>
+                <Mail className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                Contact Me
+              </Button>
+              
+              <Button variant="ghost" size="lg" className="backdrop-blur-glass hover:bg-muted/50 group">
+                <Download className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+                Resume
+              </Button>
+            </div>
+
+            {/* Enhanced Stats */}
+            <div className="flex flex-wrap gap-8 pt-8 animate-fade-in" style={{
+            animationDelay: '0.8s'
+          }}>
+              {[{
+              number: "5+",
+              label: "Projects",
+              icon: "🚀"
+            }, {
+              number: "4+",
+              label: "Certifications",
+              icon: "🏆"
+            }, {
+              number: "2+",
+              label: "Years Experience",
+              icon: "⭐"
+            }].map((stat, index) => <div key={index} className="text-center group cursor-pointer">
+                  <div className="text-3xl font-bold gradient-text group-hover:scale-110 transition-transform">
+                    {stat.number}
+                  </div>
+                  <div className="text-sm text-muted-foreground flex items-center gap-1 justify-center">
+                    <span>{stat.icon}</span>
+                    {stat.label}
+                  </div>
+                </div>)}
+            </div>
+          </div>
+
+          {/* Right Content - Enhanced Profile Image */}
+          <div className="flex justify-center lg:justify-end animate-fade-in" style={{
+          animationDelay: '1s'
+        }}>
+            <div className="relative">
+              {/* Background Effects */}
+              <div className="absolute -inset-8 bg-gradient-to-r from-primary/20 via-accent/20 to-purple-500/20 rounded-full blur-2xl animate-pulse"></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-accent/30 to-primary/30 rounded-full animate-float opacity-50"></div>
+              
+              {/* Rotating Border */}
+              <div className="absolute -inset-2 bg-gradient-to-r from-primary via-accent to-purple-500 rounded-full animate-spin" style={{
+              animationDuration: '8s'
+            }}>
+                <div className="w-full h-full bg-background rounded-full m-1"></div>
+              </div>
+              
+              {/* Profile image container */}
+              <div className="relative w-80 h-80 rounded-full overflow-hidden backdrop-blur-glass border border-white/20 group">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20"></div>
+                <img src="/lovable-uploads/0defd2b8-76a3-41a5-8455-f727559398a2.png" alt="Sudhanshu Ranjan" className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 relative z-10" />
+                
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-end justify-center pb-8">
+                  <Badge className="bg-primary/90 text-primary-foreground">
+                    Business Development Expert
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Enhanced Floating elements */}
+              <div className="absolute -top-6 -right-6 w-16 h-16 backdrop-blur-glass rounded-2xl flex items-center justify-center animate-bounce border border-white/20 group">
+                <span className="text-2xl group-hover:animate-spin">💡</span>
+              </div>
+              
+              <div className="absolute -bottom-6 -left-6 w-20 h-20 backdrop-blur-glass rounded-2xl flex items-center justify-center border border-white/20 group">
+                <span className="text-3xl group-hover:scale-125 transition-transform">📊</span>
+              </div>
+              
+              <div className="absolute top-1/4 -right-8 w-12 h-12 backdrop-blur-glass rounded-full flex items-center justify-center animate-float border border-white/20" style={{
+              animationDelay: '1s'
+            }}>
+                <span className="text-xl">🎯</span>
+              </div>
+              
+              <div className="absolute bottom-1/4 -left-8 w-14 h-14 backdrop-blur-glass rounded-full flex items-center justify-center animate-float border border-white/20" style={{
+              animationDelay: '2s'
+            }}>
+                <span className="text-xl">⚡</span>
+              </div>
+
+              {/* Skills orbit */}
+              <div className="absolute -inset-12 animate-spin" style={{
+              animationDuration: '20s'
+            }}>
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 backdrop-blur-glass rounded-full flex items-center justify-center border border-primary/30">
+                  <span className="text-xs">🐍</span>
+                </div>
+                <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-8 h-8 backdrop-blur-glass rounded-full flex items-center justify-center border border-accent/30">
+                  <span className="text-xs">📊</span>
+                </div>
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-8 h-8 backdrop-blur-glass rounded-full flex items-center justify-center border border-purple-500/30">
+                  <span className="text-xs">⚛️</span>
+                </div>
+                <div className="absolute left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 backdrop-blur-glass rounded-full flex items-center justify-center border border-green-500/30">
+                  <span className="text-xs">💾</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-pulse"></div>
+        </div>
+      </div>
+    </section>;
+};
+export default Hero;

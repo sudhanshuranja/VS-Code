@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>NV API Hub — Demo</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input, textarea { width: 100%; padding: 8px; margin: 6px 0; }
+    button { padding: 8px 12px; margin-bottom: 10px; cursor: pointer; }
+    pre { background:#f5f5f5; padding:10px; overflow:auto; white-space: pre-wrap; }
+    h2 { margin-bottom: 5px; }
+    h3 { margin-top: 25px; }
+  </style>
+</head>
+<body>
+<h2>NV API Hub — Demo</h2>
+
+
+  <h3>Public APIs</h3>
+  <input id="cat" placeholder="category (optional)" />
+  <button onclick="callPublic()">Get entries</button>
+  <pre id="publicResult"></pre>
+
+  <h3>Crypto Price</h3>
+  <input id="coin" placeholder="coin id (e.g. bitcoin)" />
+  <button onclick="callCrypto()">Get price</button>
+  <pre id="cryptoResult"></pre>
+
+  <h3>News</h3>
+  <input id="newsq" placeholder="query (optional)" />
+  <button onclick="callNews()">Get headlines</button>
+  <pre id="newsResult"></pre>
+
+  <h3>Chat (OpenAI)</h3>
+  <textarea id="prompt" rows="4" placeholder="Ask something..."></textarea>
+  <button onclick="callChat()">Ask</button>
+  <pre id="chatResult"></pre>
+
+  <!-- ✅ NEW: WEB SEARCH CHAT -->
+  <h3>Web Chat (WHO / CDC / FDA)</h3>
+  <textarea id="webprompt" rows="4" placeholder="Ask for latest official guidance..."></textarea>
+  <button onclick="callWebChat()">Ask (Web)</button>
+  <pre id="webChatResult"></pre>
+
+<script>
+async function callPublic(){
+  const cat = document.getElementById('cat').value;
+  const res = await fetch('/api/public-apis' + (cat ? '?category='+encodeURIComponent(cat) : ''));
+  document.getElementById('publicResult').innerText = JSON.stringify(await res.json(), null, 2);
+}
+
+async function callCrypto(){
+  const coin = document.getElementById('coin').value || 'bitcoin';
+  const res = await fetch('/api/crypto?coin=' + encodeURIComponent(coin));
+  document.getElementById('cryptoResult').innerText = JSON.stringify(await res.json(), null, 2);
+}
+
+async function callNews(){
+  const q = document.getElementById('newsq').value;
+  const res = await fetch('/api/news' + (q ? '?q='+encodeURIComponent(q) : ''));
+  document.getElementById('newsResult').innerText = JSON.stringify(await res.json(), null, 2);
+}
+
+async function callChat(){
+  const prompt = document.getElementById('prompt').value;
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({prompt})
+  });
+  document.getElementById('chatResult').innerText = JSON.stringify(await res.json(), null, 2);
+}
+
+/* ✅ NEW: Web Search Chat */
+async function callWebChat(){
+  const prompt = document.getElementById('webprompt').value;
+  const res = await fetch('/api/web-chat', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({prompt})
+  });
+  document.getElementById('webChatResult').innerText = JSON.stringify(await res.json(), null, 2);
+}
+</script>
+
+</body>
+</html>

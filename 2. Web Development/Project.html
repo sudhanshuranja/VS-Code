@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional To-Do List Application - C++ Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    height: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background-color: #4caf50;
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+}
+
+
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .tech-badge:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .empty-task-message p {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 40px;
+}
+
+
+        .menu-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .menu-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .menu-button:hover::before {
+            left: 100%;
+        }
+
+        .menu-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .menu-button:active {
+            transform: translateY(-1px);
+        }
+
+        .input-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            display: none;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .input-section.active {
+            display: block;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .action-button:hover::before {
+            left: 100%;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .cancel-button {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+
+        .cancel-button:hover {
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .output-area {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #00ff41;
+            padding: 25px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            min-height: 350px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 2px solid #333;
+            position: relative;
+        }
+
+        .output-area::before {
+            content: '● ● ●';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            color: #ff5f56;
+            font-size: 12px;
+        }
+
+        .task-item {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(102, 126, 234, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .task-item:hover::before {
+            opacity: 1;
+        }
+
+        .task-item:hover {
+            transform: translateX(8px) translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .task-item.completed {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #f8fff8, #e8f5e8);
+        }
+
+        .task-item.completed .task-description {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .task-id {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .task-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-status.pending {
+            background: linear-gradient(135deg, #ffc107, #ffca2c);
+            color: #212529;
+        }
+
+        .task-status.completed {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .task-description {
+            color: #495057;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+     .stat-card {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    transform: scale(1);
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+}
+
+.stat-card:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        .code-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .code-display {
+            background: linear-gradient(135deg, #2d3748, #1a202c);
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #4a5568;
+        }
+
+        .code-display .keyword { color: #63b3ed; }
+ .code-display .string { color: #9ae6b4; }
+        .code-display .comment { color: #a0aec0; }
+        .code-display .number { color: #fbb6ce; }
+        .code-display .function { color: #f6e05e; }
+
+        .feature-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            color: #6c757d;
+            line-height: 1.5;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY Rubocop(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+’            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 1024px) {
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .feature-highlights {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Professional To-Do List Application</h1>
+            <p>Advanced C++ Data Structures Implementation</p>
+            <div class="tech-stack">
+                <span class="tech-badge">C++ Linked Lists</span>
+                <span class="tech-badge">Object-Oriented Design</span>
+                <span class="tech-badge">Interactive UI</span>
+                <span class="tech-badge">Real-time Updates</span>
+                <span class="tech-badge">Data Visualization</span>
+            </div>
+        </div>
+
+        <!-- Feature Highlights -->
+        <div class="feature-highlights">
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <div class="feature-title">Linked List Implementation</div>
+                <div class="feature-description">Dynamic memory allocation using custom linked list data structure with efficient insertion and deletion operations.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Object-Oriented Design</div>
+                <div class="feature-description">Clean C++ class implementation with encapsulation, proper constructors, and organized method structure.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Real-time Analytics</div>
+                <div class="feature-description">Live statistics tracking with completion rates, task counts, and visual progress indicators.</div>
+            </div>
+        </div>
+
+        <div class="app-grid">
+            <!-- Control Panel -->
+            <div class="section">
+                <h2>🎮 Control Panel</h2>
+                <div class="menu-buttons">
+                    <button class="menu-button" onclick="showAddTask()">
+                        <span>➕</span> Add New Task
+                    </button>
+                    <button class="menu-button" onclick="viewTasks()">
+                        <span>👁️</span> View All Tasks
+                    </button>
+                    <button class="menu-button" onclick="showEditTask()">
+                        <span>✏️</span> Edit Task
+                    </button>
+                    <button class="menu-button" onclick="showDeleteTask()">
+                        <span>🗑️</span> Delete Task
+                    </button>
+                    <button class="menu-button" onclick="showMarkComplete()">
+                        <span>✅</span> Mark Complete
+                    </button>
+                    <button class="menu-button" onclick="clearOutput()">
+                        <span>🔄</span> Clear Console
+                    </button>
+                </div>
+
+                <!-- Input Forms -->
+                <div id="addTaskInput" class="input-section">
+                    <div class="input-group">
+                        <label for="taskDesc">📝 Task Description:</label>
+                        <textarea id="taskDesc" placeholder="Enter detailed task description..." rows="3"></textarea>
+                    </div>
+                    <button class="action-button" onclick="addTask()">Add Task</button>
+                    <button class="action-button cancel-button" onclick="hideInputs()">Cancel</button>
+                </div>
+
+                <div id="editTaskInput" class="input-section">
+                    <div class="input-group">
+                        <label for="editTaskId">🔍 Task ID to Edit:</label>
+                        <input type="number" id="editTaskId" placeholder="Enter task ID..." min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="newTaskDesc">📝 New Description:</label>
+                        <textarea id="newTaskDesc" placeholder="Enter new description..." rows="3"></textarea>
+                    </div>
+                    <button class="action-button" onclick="editTask()">Update Task</button>
+                    <button class="action-button cancel-button" onclick="hideInputs()">Cancel</button>
+                </div>
+
+                <div id="deleteTaskInput" class="input-section">
+                    <div class="input-group">
+                        <label for="deleteTaskId">🗑️ Task ID to Delete:</label>
+                        <input type="number" id="deleteTaskId" placeholder="Enter task ID..." min="1">
+                    </div>
+                    <button class="action-button" onclick="deleteTask()">Delete Task</button>
+                    <button class="action-button cancel-button" onclick="hideInputs()">Cancel</button>
+                </div>
+
+                <div id="markCompleteInput" class="input-section">
+                    <div class="input-group">
+                        <label for="completeTaskId">✅ Task ID to Complete:</label>
+                        <input type="number" id="completeTaskId" placeholder="Enter task ID..." min="1">
+                    </div>
+                    <button class="action-button" onclick="markComplete()">Mark Complete</button>
+                    <button class="action-button cancel-button" onclick="hideInputs()">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Console Output -->
+            <div class="section">
+                <h2>💻 Console обеOutput</h2>
+                <div id="output" class="output-area">Welcome to the Professional To-Do List Application!
+🚀 Powered by C++ Linked List Implementation
+
+=====================================
+          TO-DO LIST MENU
+=====================================
+1. Add Task
+2. View Tasks  
+3. Edit Task
+4. Delete Task
+5. Mark Task as Complete
+0. Exit
+
+Enter your choice: </div>
+            </div>
+        </div>
+<!-- Task Display -->
+<div class="section">
+    <h2>📋 Task Management Dashboard</h2>
+    <div id="taskDisplay" class="empty-task-message">
+        <p>
+            No tasks available. Start by adding some tasks to see them here!
+        </p>
+    </div>
+</div>
+
+      <!-- Statistics -->
+<div class="section">
+    <h2>📊 Performance Analytics</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number" id="totalTasks">0</div>
+            <div class="stat-label">Total Tasks</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="completedTasks">0</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="pendingTasks">0</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="completionRate">0%</div>
+            <div class="stat-label">Completion Rate</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!-- Code Display -->
+        <div class="code-section">
+            <h2>💻 C++ Source Code Implementation</h2>
+            <div class="code-display">
+<span class="comment">// Professional To-Do List Application - C++ Implementation</span>
+<span class="comment">// Features: Linked List, Dynamic Memory, OOP Principles</span>
+
+<span class="keyword">#include</span> <span class="string"><iostream></span>
+<span class="keyword">#include</span> <span class="string"><string></span>
+<span class="keyword">#include</span> <span class="string"><iomanip></span>
+<span class="keyword">using namespace</span> std;
+
+<span class="comment">// Task Node Structure for Linked List Implementation</span>
+<span class="keyword">struct</span> <span class="function">Task</span> {
+    <span class="keyword">int</span> id;                <span class="comment">// Unique task identifier</span>
+    <span class="keyword">string</span> description;    <span class="comment">// Task description</span>
+    <span class="keyword">bool</span> completed;        <span class="comment">// Task completion status</span>
+    Task* next;              <span class="comment">// Pointer to next task (linked list)</span>
+    
+    <span class="comment">// Constructor for easy task creation</span>
+    <span class="function">Task</span>(<span class="keyword">int</span> _id, <span class="keyword">string</span> _desc) : id(_id), description(_desc), 
+         completed(<span class="keyword">false</span>), next(<span class="keyword">nullptr</span>) {}
+};
+
+<span class="comment">// Main ToDoList Class - Encapsulates all functionality</span>
+<span class="keyword">class</span> <span class="function">ToDoList</span> {
+<span class="keyword">private</span>:
+    Task* head;              <span class="comment">// Head pointer of linked list</span>
+    <span class="keyword">int</span> taskCounter;       <span class="comment">// Auto-incrementing task ID</span>
+    
+    <span class="comment">// Helper method to find task by ID</span>
+    Task* <span class="function">findTask</span>(<span class="keyword">int</span> id) {
+        Task* current = head;
+        <span class="keyword">while</span> (current != <span class="keyword">nullptr</span>) {
+            <span class="keyword">if</span> (current->id == id) 
+                <span class="keyword">return</span> current;
+            current = current->next;
+        }
+        <span class="keyword">return</span> <span class="keyword">nullptr</span>;
+    }
+
+<span class="keyword">public</span>:
+    <span class="comment">// Constructor - Initialize empty list</span>
+    <span class="function">ToDoList</span>() : head(<span class="keyword">nullptr</span>), taskCounter(<span class="number">1</span>) {}
+    
+    <span class="comment">// Destructor - Clean up dynamic memory</span>
+    ~<span class="function">ToDoList</span>() {
+        <span class="keyword">while</span> (head != <span class="keyword">nullptr</span>) {
+            Task* temp = head;
+            head = head->next;
+            <span class="keyword">delete</span> temp;
+        }
+    }
+
+    <span class="comment">// Add new task to the end of linked list</span>
+    <span class="keyword">void</span> <span class="function">addTask</span>(<span class="keyword">string</span> description) {
+        Task* newTask = <span class="keyword">new</span> Task(taskCounter++, description);
+        
+        <span class="keyword">if</span> (head == <span class="keyword">nullptr</span>) {
+            head = newTask;
+        } <span class="keyword">else</span> {
+            Task* current = head;
+            <span class="keyword">while</span> (current->next != <span class="keyword">nullptr</span>) {
+                current = current->next;
+            }
+            current->next = newTask;
+        }
+        
+        cout << <span class="string">"✅ Task added successfully!"</span> << endl;
+        cout << <span class="string">"📋 Task ID: "</span> << newTask->id << endl;
+        cout << <span class="string">"📝 Description: "</span> << newTask->description << endl;
+    }
+
+    <span class="comment">// Display all tasks in formatted output</span>
+    <span class="keyword">void</span> <span class="function">viewTasks</span>() {
+        <span class="keyword">if</span> (head == <span class="keyword">nullptr</span>) {
+            cout << <span class="string">"📭 No tasks available."</span> << endl;
+            <span class="keyword">return</span>;
+        }
+        
+        cout << <span class="string">"\n🗂️  TO-DO LIST OVERVIEW"</span> << endl;
+        cout << <span class="string">"================================="</span> << endl;
+        
+        Task* current = head;
+        <span class="keyword">while</span> (current != <span class="keyword">nullptr</span>) {
+            cout << <span class="string">"📋 Task ID: "</span> << current->id << endl;
+            cout << <span class="string">"📝 Description: "</span> << current->description << endl;
+            cout << <span class="string">"✅ Status: "</span> << (current->completed ? <span class="string">"Completed"</span> : <span class="string">"Pending"</span>) << endl;
+            cout << <span class="string">"--------------------------------"</span> << endl;
+            current = current->next;
+        }
+    }
+
+    <span class="comment">// Edit task description by ID</span>
+    <span class="keyword">void</span> <span class="function">editTask</span>(<span class="keyword">int</span> id, <span class="keyword">string</span> newDescription) {
+        Task* task = findTask(id);
+        <span class="keyword">if</span> (task == <span class="keyword">nullptr</span>) {
+            cout << <span class="string">"❌ Task ID toothbrushID: "</span> << id << <span class="string">" not found."</span> << endl;
+            <span class="keyword">return</span>;
+        }
+        task->description = newDescription;
+        cout << <span class="string">"✅ Task ID: "</span> << id << <span class="string">" updated successfully!"</span> << endl;
+    }
+
+    <span class="comment">// Delete task by ID</span>
+    <span class="keyword">void</span> <span class="function">deleteTask</span>(<span class="keyword">int</span> id) {
+        Task* current = head;
+        Task* prev = <span class="keyword">nullptr</span>;
+        <span class="keyword">if</span> (head != <span class="keyword">nullptr</span> && head->id == id) {
+            head = head->next;
+            <span class="keyword">delete</span> current;
+            cout << <span class="string">"✅ Task ID: "</span> << id << <span class="string">" deleted successfully!"</span> << endl;
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">while</span> (current != <span class="keyword">nullptr</span> && current->id != id) {
+            prev = current;
+            current = current->next;
+        }
+        <span class="keyword">if</span> (current == <span class="keyword">nullptr</span>) {
+            cout << <span class="string">"❌ Task ID: "</span> << id << <span class="string">" not found."</span> << endl;
+            <span class="keyword">return</span>;
+        }
+        prev->next = current->next;
+        <span class="keyword">delete</span> current;
+        cout << <span class="string">"✅ Task ID: "</span> << id << <span class="string">" deleted successfully!"</span> << endl;
+    }
+
+    <span class="comment">// Mark task as completed by ID</span>
+    <span class="keyword">void</span> <span class="function">markComplete</span>(<span class="keyword">int</span> id) {
+        Task* task = findTask(id);
+        <span class="keyword">if</span> (task == <span class="keyword">nullptr</span>) {
+            cout << <span class="string">"❌ Task ID: "</span> << id << <span class="string">" not found."</span> << endl;
+            <span class="keyword">return</span>;
+        }
+        task->completed = <span class="keyword">true</span>;
+        cout << <span class="string">"✅ Task ID: "</span> << id << <span class="string">" marked as completed!"</span> << endl;
+    }
+
+    <span class="comment">// Get statistics</span>
+    <span class="keyword">void</span> <span class="function">getStatistics</span>() {
+        <span class="keyword">int</span> total = <span class="number">0</span>;
+        <span class="keyword">int</span> completed = <span class="number">0</span>;
+        Task* current = head;
+        <span class="keyword">while</span> (current != <span class="keyword">nullptr</span>) {
+            total++;
+            <span class="keyword">if</span> (current->completed) completed++;
+            current = current->next;
+        }
+        cout << <span class="string">"\n📊 STATISTICS"</span> << endl;
+        cout << <span class="string">"Total Tasks: "</span> << total << endl;
+        cout << <span class="string">"Completed Tasks: "</span> << completed << endl;
+        cout << <span class="string">"Pending Tasks: "</span> << (total - completed) << endl;
+        cout << <span class="string">"Completion Rate: "</span> << (total == <span class="number">0</span> ? <span class="number">0</span> : (completed * <span class="number">100</span> / total)) << <span class="string">"%"</span> << endl;
+    }
+};
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class Task {
+            constructor(id, description) {
+                this.id = id;
+                this.description = description;
+                this.completed = false;
+                this.next = null;
+            }
+        }
+
+        class ToDoList {
+            constructor() {
+                this.head = null;
+                this.taskCounter = 1;
+            }
+
+            addTask(description) {
+                const newTask = new Task(this.taskCounter++, description);
+                if (!this.head) {
+                    this.head = newTask;
+                } else {
+                    let current = this.head;
+                    while (current.next) {
+                        current = current.next;
+                    }
+                    current.next = newTask;
+                }
+                this.updateUI();
+                return `✅ Task added successfully!\n📋 Task ID: ${newTask.id}\n📝 Description: ${newTask.description}`;
+            }
+
+            viewTasks() {
+                if (!this.head) {
+                    return "📭 No tasks available.";
+                }
+                let output = "\n🗂️  TO-DO LIST OVERVIEW\n=================================\n";
+                let current = this.head;
+                while (current) {
+                    output += `📋 Task ID: ${current.id}\n📝 Description: ${current.description}\n✅ Status: ${current.completed ? "Completed" : "Pending"}\n--------------------------------\n`;
+                    current = current.next;
+                }
+                return output;
+            }
+
+            editTask(id, newDescription) {
+                let task = this.findTask(id);
+                if (!task) {
+                    return `❌ Task ID: ${id} not found.`;
+                }
+                task.description = newDescription;
+                this.updateUI();
+                return `✅ Task ID: ${id} updated successfully!`;
+            }
+
+            deleteTask(id) {
+                if (!this.head) {
+                    return `❌ Task ID: ${id} not found.`;
+                }
+                if (this.head.id === id) {
+                    this.head = this.head.next;
+                    this.updateUI();
+                    return `✅ Task ID: ${id} deleted successfully!`;
+                }
+                let current = this.head;
+                let prev = null;
+                while (current && current.id !== id) {
+                    prev = current;
+                    current = current.next;
+                }
+                if (!current) {
+                    return `❌ Task ID: ${id} not found.`;
+                }
+                prev.next = current.next;
+                this.updateUI();
+                return `✅ Task ID: ${id} deleted successfully!`;
+            }
+
+            markComplete(id) {
+                let task = this.findTask(id);
+                if (!task) {
+                    return `❌ Task ID: ${id} not found.`;
+                }
+                task.completed = true;
+                this.updateUI();
+                return `✅ Task ID: ${id} marked as completed!`;
+            }
+
+            findTask(id) {
+                let current = this.head;
+                while (current) {
+                    if (current.id === id) {
+                        return current;
+                    }
+                    current = current.next;
+                }
+                return null;
+            }
+
+            getStatistics() {
+                let total = 0;
+                let completed = 0;
+                let current = this.head;
+                while (current) {
+                    total++;
+                    if (current.completed) completed++;
+                    current = current.next;
+                }
+                const pending = total - completed;
+                const completionRate = total === 0 ? 0 : Math.round((completed * 100) / total);
+                return { total, completed, pending, completionRate };
+            }
+
+            updateUI() {
+                const taskDisplay = document.getElementById('taskDisplay');
+                const stats = this.getStatistics();
+                document.getElementById('totalTasks').textContent = stats.total;
+                document.getElementById('completedTasks').textContent = stats.completed;
+                document.getElementById('pendingTasks').textContent = stats.pending;
+                document.getElementById('completionRate').textContent = `${stats.completionRate}%`;
+                document.getElementById('progressFill').style.width = `${stats.completionRate}%`;
+
+                if (!this.head) {
+                    taskDisplay.innerHTML = `<p style="text-align: center; color: #6c757d; font-style: italic; padding: 40px;">
+                        No tasks available. Start by adding some tasks to see them here!
+                    </p>`;
+                    return;
+                }
+
+                let html = '';
+                let current = this.head;
+                while (current) {
+                    html += `
+                        <div class="task-item ${current.completed ? 'completed' : ''}">
+                            <div class="task-header">
+                                <span class="task-id">Task #${current.id}</span>
+                                <span class="task-status ${current.completed ? 'completed' : 'pending'}">
+                                    ${current.completed ? 'Completed' : 'Pending'}
+                                </span>
+                            </div>
+                            <div class="task-description">${current.description}</div>
+                        </div>
+                    `;
+                    current = current.next;
+                }
+                taskDisplay.innerHTML = html;
+            }
+        }
+
+        const todoList = new ToDoList();
+
+        function showAddTask() {
+            hideInputs();
+            document.getElementById('addTaskInput').classList.add('active');
+        }
+
+        function showEditTask() {
+            hideInputs();
+            document.getElementById('editTaskInput').classList.add('active');
+        }
+
+        function showDeleteTask() {
+            hideInputs();
+            document.getElementById('deleteTaskInput').classList.add('active');
+        }
+
+        function showMarkComplete() {
+            hideInputs();
+            document.getElementById('markCompleteInput').classList.add('active');
+        }
+
+        function hideInputs() {
+            document.querySelectorAll('.input-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('taskDesc').value = '';
+            document.getElementById('editTaskId').value = '';
+            document.getElementById('newTaskDesc').value = '';
+            document.getElementById('deleteTaskId').value = '';
+            document.getElementById('completeTaskId').value = '';
+        }
+
+        function addTask() {
+            const description = document.getElementById('taskDesc').value.trim();
+            if (description === '') {
+                alert('Please enter a task description.');
+                return;
+            }
+            const output = todoList.addTask(description);
+            document.getElementById('output').textContent = output;
+            hideInputs();
+        }
+
+        function viewTasks() {
+            const output = todoList.viewTasks();
+            document.getElementById('output').textContent = output;
+            hideInputs();
+        }
+
+        function editTask() {
+            const id = parseInt(document.getElementById('editTaskId').value);
+            const newDescription = document.getElementById('newTaskDesc').value.trim();
+            if (isNaN(id) || id < 1) {
+                alert('Please enter a valid task ID.');
+                return;
+            }
+            if (newDescription === '') {
+                alert('Please enter a new task description.');
+                return;
+            }
+            const output = todoList.editTask(id, newDescription);
+            document.getElementById('output').textContent = output;
+            hideInputs();
+        }
+
+        function deleteTask() {
+            const id = parseInt(document.getElementById('deleteTaskId').value);
+            if (isNaN(id) || id < 1) {
+                alert('Please enter a valid task ID.');
+                return;
+            }
+            const output = todoList.deleteTask(id);
+            document.getElementById('output').textContent = output;
+            hideInputs();
+        }
+
+        function markComplete() {
+            const id = parseInt(document.getElementById('completeTaskId').value);
+            if (isNaN(id) || id < 1) {
+                alert('Please enter a valid task ID.');
+                return;
+            }
+            const output = todoList.markComplete(id);
+            document.getElementById('output').textContent = output;
+            hideInputs();
+        }
+
+        function clearOutput() {
+            document.getElementById('output').textContent = `Welcome to the Professional To-Do List Application!
+🚀 Powered by C++ Linked List Implementation
+
+=====================================
+          TO-DO LIST MENU
+=====================================
+1. Add Task
+2. View Tasks  
+3. Edit Task
+4. Delete Task
+5. Mark Task as Complete
+0. Exit
+
+Enter your choice: `;
+            hideInputs();
+        }
+
+        // Initialize UI
+        todoList.updateUI();
+    </script>
+</body>
+</html>

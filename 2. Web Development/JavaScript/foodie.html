@@ -1,0 +1,549 @@
+<!-- Code of foodie website
+Name Sudhanshu Ranjan
+Reg. no. 12313589 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foodie Delight</title>
+<style>
+body {
+font-family: 'Arial', sans-serif;
+margin: 0;
+padding: 0;
+background-color: #fff8e1;
+color: #333;
+}
+header {
+background-color: #ff5722;
+padding: 15px;
+text-align: center;
+}
+nav ul {
+list-style-type: none;
+padding: 0;
+}
+nav ul li {
+display: inline;
+margin: 0 10px;
+}
+nav ul li a {
+color: white;
+text-decoration: none;
+font-size: 18px;
+}
+.hero {
+background-image: url('https://th.bing.com/th/id/R.01c175fd913e9d90a28ba9b4cbecdcf5?rik=PYWaACm8Z1rJmw&riu=http%3a%2f%2fwww.northeastchartertour.com%2fwp-content%2fuploads%2f2016%2f07%2fNortheast-portfolio-13.jpg&ehk=rdjzzYgwbiliJY275UrjAxSsz%2bCa7gEg731452wfMu0%3d&risl=&pid=ImgRaw&r=0');
+background-size: cover;
+color: white;
+padding: 100px 0;
+text-align: center;
+}
+.hero h1 {
+font-size: 3rem;
+margin: 0;
+}
+.hero p {
+font-size: 1.25rem;
+margin: 10px 0 0;
+}
+.featured-recipes, .latest-blog {
+padding: 50px 10%;
+}
+.featured-recipes h2, .latest-blog h2 {
+font-size: 2rem;
+margin-bottom: 20px;
+}
+.recipe-cards, .blog-list {
+display: flex;
+gap: 20px;
+flex-wrap: wrap;
+justify-content: center;
+}
+.recipe-card, .blog-post {
+background-color: #fff;
+padding: 15px;
+border-radius: 8px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+width: 150px; /*Smaller width */
+height: 250px; /* Fixed height */
+position: relative;
+overflow: hidden;
+margin-bottom: 20px; /* Space between cards */
+transition: transform 0.3s ease;
+}
+.recipe-card img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+filter: blur(8px); /* Apply blur to the image */
+transition: filter 0.3s ease; /* Transition for smoother effect */
+}
+.recipe-card .card-content {
+position: absolute;
+top: 10px;
+left: 10px;
+right: 10px;
+bottom: 10px;
+background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+color: white;
+padding: 15px;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+z-index: 1;
+}
+.recipe-card h3 {
+font-size: 1.1rem;
+margin: 0;
+}
+.recipe-card p {
+font-size: 0.9rem;
+margin: 10px 0;
+}
+.recipe-card a {
+text-decoration: none;
+color: #ff5722;
+font-weight: bold;
+}
+.recipe-card:hover img {
+filter: blur(0px); /* Remove blur on hover */
+}
+.recipe-card:hover {
+transform: scale(1.05); /* Slight scale effect on hover */
+}
+/* Modal Styles */
+.modal {
+display: none;
+position: fixed;
+z-index: 1;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.5);
+overflow: auto;
+}
+.modal-content {
+background-color: #fff;
+margin: 15% auto;
+padding: 20px;
+border-radius: 10px;
+width: 50%;
+}
+.modal-header h2 {
+margin-top: 0;
+}
+.modal-footer {
+text-align: right;
+}
+.modal-close {
+background-color: #ff5722;
+color: white;
+padding: 10px 20px;
+border: none;
+cursor: pointer;
+font-size: 16px;
+}
+.modal-close:hover {
+background-color: #e64a19;
+}
+</style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<header>
+<nav>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/recipes">Recipes</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a href="/reviews">Reviews</a></li>
+<li><a href="/about">About Us</a></li>
+<li><a href="/contact">Contact</a></li>
+</ul>
+</nav>
+</header>
+<!-- Hero Section -->
+<section class="hero">
+<h1>Discover Your Next Favorite Recipe</h1>
+<p>Explore thousands of mouth-watering dishes to suit any palate!</p>
+</section>
+<!-- Featured Recipes Section -->
+<section class="featured-recipes">
+<h2>Featured Recipes</h2>
+<div class="recipe-cards">
+<!-- Recipe Card 1 -->
+<div class="recipe-card">
+<img src="https://preview.redd.it/7acez3gpbuq41.jpg?auto=webp&s=4e2f8b9776712f342451515c325d6b305ae1db07" alt="Delicious Pasta">
+<div class="card-content">
+<h3>Delicious Pasta</h3>
+<p>Quick and easy pasta with creamy sauce.</p>
+<a href="javascript:void(0);" onclick="openModal('Delicious Pasta', 'Quick and easy pasta with creamy sauce. This pasta recipe is perfect for a weeknight dinner or a special occasion. Serve with a sprinkle of parmesan and fresh herbs!')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="recipe-card">
+<img src="https://i.pinimg.com/originals/19/10/03/191003bbc5c6a9eba30eaf53ad056961.jpg" alt="Healthy Salad">
+<div class="card-content">
+<h3>Healthy Salad</h3>
+<p>A fresh salad with a tangy dressing.</p>
+<a href="javascript:void(0);" onclick="openModal('Healthy Salad', 'A healthy salad made with fresh greens, tomatoes, cucumbers, and a tangy vinaigrette dressing. Perfect for a light lunch or as a side dish.')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 3 -->
+<div class="recipe-card">
+<img src="https://tatyanaseverydayfood.com/wp-content/uploads/2015/01/Fruit-Smoothie.jpg" alt="Fruit Smoothie">
+<div class="card-content">
+<h3>Fruit Smoothie</h3>
+<p>Blended fruits for a refreshing treat.</p>
+<a href="javascript:void(0);" onclick="openModal('Fruit Smoothie', 'A refreshing fruit smoothie made with a blend of fresh fruits and yogurt. It\'s a perfect breakfast or snack!')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 4 -->
+<div class="recipe-card">
+<img src="https://th.bing.com/th/id/OIP.DW1OY9n6PDlJyRflLdQoWAHaEN?rs=1&pid=ImgDetMain" alt="Dosa">
+<div class="card-content">
+<h3>Dosa</h3>
+<p>Classic South Indian food made with rice.</p>
+<a href="javascript:void(0);" onclick="openModal('Dosa', 'A dosa, dose, dosai or dosha is a thin, savoury crepe in South Indian cuisine made from a fermented batter of ground black gram and rice. Dosas are served hot, often with chutney and sambar (a lentil-based vegetable stew). Dosas are a common food in South India.')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 5 -->
+<div class="recipe-card">
+<img src="https://th.bing.com/th/id/OIP.mWq-1jnMc6JmPkvhjeoYugHaLH?rs=1&pid=ImgDetMain" alt="Spaghetti Bolognese">
+<div class="card-content">
+<h3>Spaghetti Bolognese</h3>
+<p>Classic pasta with a rich meat sauce.</p>
+<a href="javascript:void(0);" onclick="openModal('Spaghetti Bolognese', 'This classic spaghetti Bolognese recipe features rich and savory meat sauce with tender spaghetti. A comforting, hearty dish for any occasion.')">View Recipe</a>
+</div>
+</div>
+<!-- Add more cards as needed -->
+<!-- Recipe Card 6 -->
+<div class="recipe-card">
+<img src="https://th.bing.com/th?id=OSK.HEROipHZtPgeflk7S6noeN300XD_Kr7vIKsjq7mWNU4p62c&w=472&h=280&c=13&rs=2&o=6&pid=SANGAM" alt="Tomato Soup">
+<div class="card-content">
+<h3>Tomato Soup</h3>
+<p>Warm and comforting with a creamy texture.</p>
+<a href="javascript:void(0);" onclick="openModal('Tomato Soup', 'Tomato soup is a warm, comforting dish made primarily from tomatoes, broth, and various seasonings. It can be enjoyed smooth or chunky and is often served with a grilled cheese sandwich.')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 7 -->
+<div class="recipe-card">
+<img src="https://www.sargento.com/assets/Uploads/Recipe/Image/burger_0.jpg" alt="Cheeseburger">
+<div class="card-content">
+<h3>Cheeseburger</h3>
+<p>Classic American burger with cheese and fresh veggies.</p>
+<a href="javascript:void(0);" onclick="openModal('Cheeseburger', 'A cheeseburger typically consists of a cooked beef patty placed inside a sliced bun, topped with cheese and various condiments such as lettuce, tomato, onion, pickles, ketchup, and mustard. The cheese is often melted on the patty to enhance flavor..')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 8 -->
+<div class="recipe-card">
+<img src="https://th.bing.com/th?id=OSK.HEROTfHljhMxHpm8F_OwTMtx127G0GbIOgvHunBPE4LmnBs&w=472&h=280&c=13&rs=2&o=6&pid=SANGAM" alt="Chocolate Cake">
+<div class="card-content">
+<h3>Chocolate Cake</h3>
+<p>Rich, moist, and full of chocolate goodness.</p>
+<a href="javascript:void(0);" onclick="openModal('Chocolate Cake', 'Chocolate cake is a rich, moist dessert made primarily using cocoa powder or melted chocolate. It typically includes ingredients such as flour, sugar, eggs, butter, and baking soda or powder. The flavors can be enhanced with vanilla or coffee, and it can be frosted with chocolate icing or ganache for added sweetness..')">View Recipe</a>
+</div>
+</div>
+<div class="recipe-card">
+<img src="https://preview.redd.it/7acez3gpbuq41.jpg?auto=webp&s=4e2f8b9776712f342451515c325d6b305ae1db07" alt="Delicious Pasta">
+<div class="card-content">
+<h3>Delicious Pasta</h3>
+<p>Quick and easy pasta with creamy sauce.</p>
+<a href="javascript:void(0);" onclick="openModal('Delicious Pasta', 'Quick and easy pasta with creamy sauce. This pasta recipe is perfect for a weeknight dinner or a special occasion. Serve with a sprinkle of parmesan and fresh herbs!')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="recipe-card">
+<img src="https://i.pinimg.com/originals/19/10/03/191003bbc5c6a9eba30eaf53ad056961.jpg" alt="Healthy Salad">
+<div class="card-content">
+<h3>Healthy Salad</h3>
+<p>A fresh salad with a tangy dressing.</p>
+<a href="javascript:void(0);" onclick="openModal('Healthy Salad', 'A healthy salad made with fresh greens, tomatoes, cucumbers, and a tangy vinaigrette dressing. Perfect for a light lunch or as a side dish.')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 3 -->
+<div class="recipe-card">
+<img src="https://tatyanaseverydayfood.com/wp-content/uploads/2015/01/Fruit-Smoothie.jpg" alt="Fruit Smoothie">
+<div class="card-content">
+<h3>Fruit Smoothie</h3>
+<p>Blended fruits for a refreshing treat.</p>
+<a href="javascript:void(0);" onclick="openModal('Fruit Smoothie', 'A refreshing fruit smoothie made with a blend of fresh fruits and yogurt. It\'s a perfect breakfast or snack!')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 4 -->
+<div class="recipe-card">
+<img src="https://th.bing.com/th/id/OIP.DW1OY9n6PDlJyRflLdQoWAHaEN?rs=1&pid=ImgDetMain" alt="Dosa">
+<div class="card-content">
+<h3>Dosa</h3>
+<p>Classic South Indian food made with rice.</p>
+<a href="javascript:void(0);" onclick="openModal('Dosa', 'A dosa, dose, dosai or dosha is a thin, savoury crepe in South Indian cuisine made from a fermented batter of ground black gram and rice. Dosas are served hot, often with chutney and sambar (a lentil-based vegetable stew). Dosas are a common food in South India.')">View Recipe</a>
+</div>
+</div>
+<!-- Recipe Card 5 -->
+<div class="recipe-card">
+<img src="https://th.bing.com/th/id/OIP.mWq-1jnMc6JmPkvhjeoYugHaLH?rs=1&pid=ImgDetMain" alt="Spaghetti Bolognese">
+<div class="card-content">
+<h3>Spaghetti Bolognese</h3>
+<p>Classic pasta with a rich meat sauce.</p>
+<a href="javascript:void(0);" onclick="openModal('Spaghetti Bolognese', 'This classic spaghetti Bolognese recipe features rich and savory meat sauce with tender spaghetti. A comforting, hearty dish for any occasion.')">View Recipe</a>
+</div>
+</div>
+<!-- Add more cards as needed -->
+<!-- Recipe Card 6 -->
+<div class="recipe-card">
+<img src="https://th.bing.com/th?id=OSK.HEROipHZtPgeflk7S6noeN300XD_Kr7vIKsjq7mWNU4p62c&w=472&h=280&c=13&rs=2&o=6&pid=SANGAM" alt="Tomato Soup">
+<div class="card-content">
+<h3>Tomato Soup</h3>
+<p>Warm and comforting with a creamy texture.</p>
+<a href="javascript:void(0);" onclick="openModal('Tomato Soup', 'Tomato soup is a warm, comforting dish made primarily from tomatoes, broth, and various seasonings. It can be enjoyed smooth or chunky and is often served with a grilled cheese sandwich.')">View Recipe</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Modal for Viewing Recipe -->
+<div id="recipeModal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2 id="modalTitle"></h2>
+</div>
+<div class="modal-body">
+<p id="modalDescription"></p>
+</div>
+<div class="modal-footer">
+<button class="modal-close" onclick="closeModal()">Close</button>
+</div>
+</div>
+</div>
+<div id="contactModal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Contact Information</h2>
+</div>
+<div class="modal-body">
+<p>If you have any queries, feel free to contact our manager:</p>
+<p><strong>Sudhansu Ranjan</strong></p>
+<p>Phone Number: <strong>9304781967</strong></p>
+<p>Don't hesitate to contact us, we are here to assist you!</p>
+</div>
+<div class="modal-footer">
+<button class="modal-close" onclick="closeContactModal()">Close</button>
+</div>
+</div>
+</div>
+<!-- Modal for About Us Information -->
+<div id="aboutUsModal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>About Us</h2>
+</div>
+<div class="modal-body">
+<p>Welcome to Foodie Delight, the ultimate platform for food lovers. Our mission is to bring you the best recipes from around the world, help you discover new flavors, and inspire you to get creative in the kitchen. Whether you're a novice or a seasoned chef, our carefully curated recipes, cooking tips, and food blogs are designed to guide you on your culinary journey. Join us and start exploring!</p>
+</div>
+<div class="modal-footer">
+<button class="modal-close" onclick="closeAboutUsModal()">Close</button>
+</div>
+</div>
+</div>
+<!-- Modal for Blog Information -->
+<div id="blogModal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Latest Blog Posts</h2>
+</div>
+<div class="modal-body">
+<!-- Blog 1 -->
+<div class="blog-post">
+<h3>The Best Italian Pizza Recipes</h3>
+<p>Discover the secret to making the perfect pizza dough and sauce. Learn how to achieve the perfect balance of crispy crust and creamy cheese. Whether you're a beginner or an expert, this guide will help you create an authentic Italian pizza in your kitchen.</p>
+</div>
+<hr>
+<!-- Blog 2 -->
+<div class="blog-post">
+<h3>5 Quick and Healthy Breakfasts</h3>
+<p>Start your day right with these quick and nutritious breakfast ideas. From protein-packed smoothies to hearty oatmeal bowls, these breakfast options are perfect for busy mornings when you need a healthy boost. No more skipping breakfast!</p>
+</div>
+</div>
+<div class="modal-footer">
+<button class="modal-close" onclick="closeBlogModal()">Close</button>
+</div>
+</div>
+</div>
+<!-- Modal for Reviews -->
+<div id="reviewsModal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Give Your Valuable Feedback</h2>
+</div>
+<div class="modal-body">
+<p>Please rate your experience and provide us with any suggestions to improve.</p>
+<!-- 5 Star Rating -->
+<div id="star-rating">
+<span class="star" data-value="1">&#9733;</span>
+<span class="star" data-value="2">&#9733;</span>
+<span class="star" data-value="3">&#9733;</span>
+<span class="star" data-value="4">&#9733;</span>
+<span class="star" data-value="5">&#9733;</span>
+</div>
+<p>Rating: <span id="rating-value">0</span> / 5</p>
+<!-- Feedback Textarea -->
+<textarea id="feedback" placeholder="What can we improve?"></textarea>
+<!-- Submit Button -->
+<button id="submit-feedback" onclick="submitFeedback()">Submit Feedback</button>
+</div>
+<div class="modal-footer">
+<button class="modal-close" onclick="closeReviewsModal()">Close</button>
+</div>
+</div>
+</div>
+<!-- Modal for Recipes -->
+<div id="recipesModal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Explore Our Recipes</h2>
+</div>
+<div class="modal-body">
+<h3>Discover Recipes from Around the World</h3>
+<div id="recipe-cuisines">
+<!-- Italian Recipe -->
+<div class="recipe-cuisine">
+<h4>Italian</h4>
+<p>Italian cuisine is famous for its rich flavors and diverse dishes like pizza, pasta, and risotto. Each region brings something unique to the table, from hearty meats to fresh seafood.</p>
+</div>
+<!-- American Recipe -->
+<div class="recipe-cuisine">
+<h4>American</h4>
+<p>American cuisine is a melting pot of influences, from burgers and fries to southern barbecue and apple pie. Comfort food at its finest, offering a blend of flavors and textures.</p>
+</div>
+<!-- Indian Recipe -->
+<div class="recipe-cuisine">
+<h4>Indian</h4>
+<p>Indian cuisine is known for its aromatic spices and vibrant flavors. Curries, biryanis, and chapatis are just the beginning of a rich culinary heritage.</p>
+</div>
+<!-- Chinese Recipe -->
+<div class="recipe-cuisine">
+<h4>Chinese</h4>
+<p>Chinese food offers a wide variety of dishes, from crispy fried spring rolls to flavorful stir-fries. Its balance of sweet, sour, salty, and umami makes it a global favorite.</p>
+</div>
+<!-- Korean Recipe -->
+<div class="recipe-cuisine">
+<h4>Korean</h4>
+<p>Korean cuisine is known for its bold flavors, fermented foods like kimchi, and sizzling hot dishes such as bibimbap and bulgogi. It’s a balance of spicy, savory, and sweet.</p>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="modal-close" onclick="closeRecipesModal()">Close</button>
+</div>
+</div>
+</div>
+<!-- Footer Removed -->
+<script>
+// Open modal with the recipe details
+function openModal(title, description) {
+document.getElementById("modalTitle").textContent = title;
+document.getElementById("modalDescription").textContent = description;
+document.getElementById("recipeModal").style.display = "block";
+}
+// Close the modal
+function closeModal() {
+document.getElementById("recipeModal").style.display = "none";
+}
+// Open the contact modal
+function openContactModal() {
+document.getElementById("contactModal").style.display = "block";
+}
+// Close the contact modal
+function closeContactModal() {
+document.getElementById("contactModal").style.display = "none";
+}
+// Add the "Contact" link functionality
+document.querySelector("a[href='/contact']").addEventListener("click", function(event) {
+event.preventDefault(); // Prevent the default link behavior
+openContactModal();
+});
+// Open the About Us modal
+function openAboutUsModal() {
+document.getElementById("aboutUsModal").style.display = "block";
+}
+// Close the About Us modal
+function closeAboutUsModal() {
+document.getElementById("aboutUsModal").style.display = "none";
+}
+// Add the "About Us" link functionality
+document.querySelector("a[href='/about']").addEventListener("click", function(event) {
+event.preventDefault(); // Prevent the default link behavior
+openAboutUsModal();
+});
+// Open the Blog modal
+function openBlogModal() {
+document.getElementById("blogModal").style.display = "block";
+}
+// Close the Blog modal
+function closeBlogModal() {
+document.getElementById("blogModal").style.display = "none";
+}
+// Add the "Blog" link functionality
+document.querySelector("a[href='/blog']").addEventListener("click", function(event) {
+event.preventDefault(); // Prevent the default link behavior
+openBlogModal();
+});
+// Open the Reviews modal
+function openReviewsModal() {
+document.getElementById("reviewsModal").style.display = "block";
+}
+// Close the Reviews modal
+function closeReviewsModal() {
+document.getElementById("reviewsModal").style.display = "none";
+}
+// Handle the star rating selection
+const stars = document.querySelectorAll("#star-rating .star");
+let rating = 0;
+// Highlight the stars based on selection
+stars.forEach(star => {
+star.addEventListener("click", () => {
+rating = parseInt(star.getAttribute("data-value"));
+document.getElementById("rating-value").textContent = rating;
+// Highlight stars up to the selected rating
+stars.forEach(s => {
+if (parseInt(s.getAttribute("data-value")) <= rating) {
+s.style.color = "#ff5722";
+} else {
+s.style.color = "#ccc";
+}
+});
+});
+});
+// Submit Feedback
+function submitFeedback() {
+const feedback = document.getElementById("feedback").value;
+if (rating > 0 && feedback.trim() !== "") {
+alert("Thank you for your valuable feedback! Your rating: " + rating + " stars.");
+closeReviewsModal();
+} else {
+alert("Please provide a rating and feedback.");
+}
+}
+// Add the "Reviews" link functionality
+document.querySelector("a[href='/reviews']").addEventListener("click", function(event) {
+event.preventDefault(); // Prevent the default link behavior
+openReviewsModal();
+});
+// Open the Recipes modal
+function openRecipesModal() {
+document.getElementById("recipesModal").style.display = "block";
+}
+// Close the Recipes modal
+function closeRecipesModal() {
+document.getElementById("recipesModal").style.display = "none";
+}
+// Add the "Recipes" link functionality
+document.querySelector("a[href='/recipes']").addEventListener("click", function(event) {
+event.preventDefault(); // Prevent the default link behavior
+openRecipesModal();
+});
+</script>
+</body>
+</html>

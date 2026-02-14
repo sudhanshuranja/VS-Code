@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KBC Game</title>
+    <style>
+        body {
+            font-family: 'Arial Narrow Bold', sans-serif;
+            text-align: center;
+            background-color: purple; 
+            background-image: url(https://i.ytimg.com/vi/-KSGSjeEJes/maxresdefault.jpg);
+            color: white;
+        }
+        h1 {
+            color: #fff;
+            font-family: papyrus;
+            font-style: bold;
+            font-size: xxx-large;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .options {
+            display: flex;
+            justify-content: center;
+        }
+        .option {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+        .score {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .lifelines {
+            margin-top: 20px;
+        }
+        .lifeline-button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .timer {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 >Kaun Banega Crorepati</h1>
+    <div class="timer" id="timer">Time left: 30 seconds</div>
+   <div class="score" id="score">Current Score: ₹0</div> <br>
+    <div class="question" id="question">Loading question...</div>
+    <div class="options" id="options"></div>
+    <div class="lifelines">
+        <br>
+        <br>
+        <br>
+        <br> <br>
+        <br>
+        <button class="lifeline-button" id="fiftyFifty">50:50</button>
+        <button class="lifeline-button" id="askAudience">Ask the Audience</button>
+        <button class="lifeline-button" id="phoneAFriend">Phone a Friend</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Where is bone marrow found?",
+                options: ["Near Tibia", "Near femur", "Inside Bones", "Inside Muscles"],
+                correctAnswer: "Inside Bones"
+            },
+            {
+                question: "Which cricket player has the best fan following over the world?",
+                options: ["M.S.Dhoni", "Virat Kohli", "Bumrah", "Rohit Sharma"],
+                correctAnswer: "M.S.Dhoni"
+            },
+            {
+                question: "Where is the smallest bone found?",
+                options: ["Near Tibia", "Near femur", "Inside Bones", "In ear"],
+                correctAnswer: "In ear"
+            },
+            {
+                question: "What is the capital of Iraq?",
+                options: ["Baghdad", "Dhaka", "Paris", "Tehran"],
+                correctAnswer: "Baghdad"
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timer;
+        let timeLeft = 30;
+
+        function loadQuestion() {
+            resetTimer();
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const scoreElement = document.getElementById('score');
+            
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            questionElement.textContent = `Q${currentQuestionIndex + 1}: ${currentQuestion.question}`;
+            optionsElement.innerHTML = '';
+
+            currentQuestion.options.forEach((option) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => checkAnswer(option));
+                optionsElement.appendChild(optionElement);
+            });
+
+            scoreElement.textContent = `Current Score: ₹${score}`;
+        }
+
+        function checkAnswer(selectedOption) {
+            const currentQuestion = questions[currentQuestionIndex];
+            clearInterval(timer);
+            
+            if (selectedOption === currentQuestion.correctAnswer) {
+                score += (currentQuestionIndex + 1) * 70000; // Update score based on question index
+                alert('Correct answer! You win ₹' + (currentQuestionIndex + 1) * 70000);
+                
+                currentQuestionIndex++;
+                
+                if (currentQuestionIndex < questions.length) {
+                    loadQuestion();
+                } else {
+                    alert('Congratulations! You are a Crorepati!');
+                    resetGame();
+                }
+                
+            } else {
+                alert('Oops! Wrong answer. Game over!');
+                resetGame();
+            }
+        }
+
+        function resetGame() {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function resetTimer() {
+            timeLeft = 30;
+            document.getElementById('timer').textContent = `Time left: ${timeLeft} seconds`;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = `Time left: ${timeLeft} seconds`;
+                
+                if (timeLeft <= 0) {
+                    alert('Time\'s up! Game over!');
+                    resetGame();
+                }
+            }, 1000);
+        }
+
+        // Lifeline functionalities
+        document.getElementById('fiftyFifty').addEventListener('click', () => fiftyFifty());
+        document.getElementById('askAudience').addEventListener('click', () => askAudience());
+        document.getElementById('phoneAFriend').addEventListener('click', () => phoneAFriend());
+
+        function fiftyFifty() {
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            const wrongOptions = currentQuestion.options.filter(option => option !== currentQuestion.correctAnswer);
+            
+            // Randomly remove one wrong answer
+            const removedOption = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+            
+            const optionsElements = document.querySelectorAll('.option');
+            
+            optionsElements.forEach(option => {
+                if (option.textContent === removedOption) {
+                    option.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('fiftyFifty').disabled = true; // Disable lifeline after use
+        }
+
+        function askAudience() {
+            const currentQuestion = questions[currentQuestionIndex];
+            const audienceVotes = {};
+            
+            currentQuestion.options.forEach(option => {
+                audienceVotes[option] = Math.floor(Math.random() * 100);
+            });
+            
+            const sortedOptions = Object.keys(audienceVotes).sort((a, b) => audienceVotes[b] - audienceVotes[a]);
+            
+            alert(`Audience votes:\n${sortedOptions.map(option => `${option}: ${audienceVotes[option]}%`).join('\n')}`);
+            
+            document.getElementById('askAudience').disabled = true; // Disable lifeline after use
+        }
+
+        function phoneAFriend() {
+            const currentQuestion = questions[currentQuestionIndex];
+            const friendSuggestion = currentQuestion.options[Math.floor(Math.random() * currentQuestion.options.length)];
+            
+            alert(`Friend suggests: ${friendSuggestion}`);
+            
+            document.getElementById('phoneAFriend').disabled = true; // Disable lifeline after use
+        }
+
+        loadQuestion();
+    </script>
+
+   </body>
+</html>
+
+
+
+
+``Here's a simple **Kaun Banega Crorepati (KBC)** game implemented in HTML. You can play it directly in your browser:
+
+                      The game displays a question along with multiple options.
+                        Click on the option you think is the correct answer.
+                   If your answer is correct, you win money (virtual, of course!).
+                         Keep answering questions to become a Crorepati!
+                       You can use lifelines to help you answer questions.
+
+
+Feel free to add more questions to the `questions` array in the script to make the game more interesting. Enjoy playing!
