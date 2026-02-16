@@ -6,7 +6,7 @@ int originalNumber = number;
 int result = 0;
  while (originalNumber != 0) {
     int remainder = originalNumber % 10;
-    result += Math.pow(remainder, 3);
+    result += remainder * remainder * remainder;
     originalNumber /= 10;
 }
 if (result == number) {
