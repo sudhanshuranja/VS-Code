@@ -1221,7 +1221,6 @@
             const employeeData = Object.fromEntries(formData);
             
             currentUser = { ...currentUser, ...employeeData };
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
             
             showNotification('Profile completed successfully!', 'success');
             showDashboard();
