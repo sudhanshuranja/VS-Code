@@ -1,6 +1,9 @@
 import requests
 from config import OPENAI_API_KEY, RAPIDAPI_KEY, RAPIDAPI_HOST, NEWSAPI_KEY, REQUESTS_TIMEOUT
 from openai import OpenAI
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # ---------- PUBLIC API (NO KEY) ----------
@@ -11,7 +14,8 @@ def get_public_apis(category=None):
         r.raise_for_status()
         return r.json()
     except Exception as e:
-        return {"error": str(e)}
+        logger.exception("Error fetching public APIs")
+        return {"error": "Failed to fetch public APIs"}
 
 
 # ---------- CRYPTO (NO KEY) ----------
@@ -23,7 +27,8 @@ def get_crypto_price(coin="bitcoin", vs="usd"):
         r.raise_for_status()
         return r.json()
     except Exception as e:
-        return {"error": str(e)}
+        logger.exception("Error fetching crypto price for coin=%s vs=%s", coin, vs)
+        return {"error": "Failed to fetch crypto price"}
 
 
 # ---------- NEWS (API KEY) ----------
@@ -39,8 +44,8 @@ def get_news(query=None, country="us"):
         r.raise_for_status()
         return r.json()
     except Exception as e:
-        return {"error": str(e)}
-
+        logger.exception("Error fetching news for query=%s country=%s", query, country)
+        return {"error": "Failed to fetch news"}
 
 # ---------- OPENAI (NORMAL CHAT) ----------
 def ask_openai(prompt):
@@ -55,7 +60,8 @@ def ask_openai(prompt):
         )
         return {"reply": res.choices[0].message.content}
     except Exception as e:
-        return {"error": str(e)}
+        logger.exception("Error in ask_openai for prompt")
+        return {"error": "Failed to get response from OpenAI"}
 
 
 # ---------- OPENAI (WEB SEARCH ENABLED) ----------
@@ -109,4 +115,5 @@ Always include citations.
         }
 
     except Exception as e:
-        return {"error": str(e)}
+        logger.exception("Error in ask_openai_with_web for prompt")
+        return {"error": "Failed to get response from OpenAI web search"}
