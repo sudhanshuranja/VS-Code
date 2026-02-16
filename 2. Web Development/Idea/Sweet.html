@@ -1207,7 +1207,11 @@
                 id: Date.now()
             };
             
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            localStorage.setItem('currentUser', JSON.stringify({
+                id: currentUser.id,
+                email: currentUser.email,
+                name: currentUser.name
+            }));
             showNotification('Account created successfully!', 'success');
             showEmployeeForm();
             
