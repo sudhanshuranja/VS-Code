@@ -13,4 +13,8 @@ class calculator {
         return a + b;
     }
 }
-class Demo
+class Demo {
+    public static void main(String args[]) {
+     
+    }
+}
