@@ -6,6 +6,7 @@ from api_clients import (
     ask_openai,
     ask_openai_with_web
 )
+import os
 
 app = Flask(__name__, template_folder="templates")
 
@@ -47,4 +48,5 @@ def web_chat():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    debug_mode = os.getenv("FLASK_DEBUG", "0") == "1"
+    app.run(debug=debug_mode)
